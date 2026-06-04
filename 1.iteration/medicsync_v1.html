@@ -1,0 +1,3112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MedicSync — Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  --bg: #FDF8F3;
+  --bg-card: #FFFFFF;
+  --bg-soft: #FDF0E4;
+  --bg-positive: #EAF3DE;
+  --bg-error: #FCEDEC;
+  --bg-neutral: #F1EFE8;
+  --bg-eat: #F5FAF0;
+
+  --primary: #C8914F;
+  --primary-dark: #B07845;
+  --primary-text-on: #FDF8F3;
+  --primary-soft: #E8C49A;
+  --primary-darker-text: #7A4F20;
+  --primary-darkest-text: #5C3D1E;
+
+  --positive: #7DAF5A;
+  --positive-dark: #27500A;
+  --positive-mid: #5A9E35;
+  --positive-soft: #A8CC85;
+  --positive-text: #2D4A20;
+  --positive-sub: #6B9050;
+
+  --error: #D94F4F;
+  --error-dark: #8B1A1A;
+
+  --text-primary: #3D2B1F;
+  --text-secondary: #8B6E52;
+  --text-tertiary: #B07845;
+  --text-muted: #5F5E5A;
+  --text-deep: #4A3728;
+
+  --border: #EDD9C4;
+  --border-strong: #D0B090;
+  --border-divider: #F0E0CC;
+  --border-divider-soft: #F5EAD8;
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+
+  --tap-min: 54px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  background: #E8DFD2;
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text-primary);
+  font-size: 17px;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 16px;
+  background:
+    radial-gradient(circle at 20% 30%, #F0E4D2 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, #E0CFB6 0%, transparent 50%),
+    #E8DFD2;
+}
+
+.brand-bar {
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  margin-bottom: 18px;
+  color: var(--text-secondary);
+}
+.brand-name {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--primary-dark);
+  text-transform: uppercase;
+}
+.brand-tag {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.phone-shell {
+  width: 100%;
+  max-width: 380px;
+  height: 780px;
+  background: var(--bg);
+  border-radius: 44px;
+  border: 8px solid #2C2418;
+  box-shadow:
+    0 30px 60px -20px rgba(60, 40, 20, 0.4),
+    0 12px 24px -8px rgba(60, 40, 20, 0.25);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 26px;
+  background: #2C2418;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  z-index: 100;
+}
+
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 28px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-deep);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 90;
+}
+.status-bar-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.signal-dot {
+  width: 4px; height: 4px; border-radius: 50%; background: var(--text-deep);
+}
+.battery {
+  width: 22px; height: 11px;
+  border: 1.5px solid var(--text-deep);
+  border-radius: 3px;
+  position: relative;
+}
+.battery::after {
+  content: ''; position: absolute;
+  top: 2px; left: 1px; bottom: 2px;
+  width: 70%;
+  background: var(--text-deep);
+  border-radius: 1px;
+}
+.battery::before {
+  content: ''; position: absolute;
+  right: -3px; top: 3px; width: 2px; height: 5px;
+  background: var(--text-deep);
+  border-radius: 0 1px 1px 0;
+}
+
+.app-area {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  background: var(--bg);
+}
+.screen.active { display: flex; }
+.screen.eat-bg { background: var(--bg-eat); }
+
+.scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 20px 20px;
+  -webkit-overflow-scrolling: touch;
+}
+.scroll::-webkit-scrollbar { width: 0; }
+
+.greeting {
+  padding: 18px 0 8px;
+}
+.greeting-eyebrow {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.greeting-name {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.greeting-date {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.section-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary-dark);
+  margin: 22px 0 10px;
+}
+
+.next-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border);
+  padding: 18px 18px 16px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 0 rgba(200, 145, 79, 0.04);
+  transition: padding 0.2s;
+}
+
+.next-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  cursor: pointer;
+  gap: 10px;
+}
+.next-card-meds {
+  flex: 1;
+  min-width: 0;
+}
+.next-card-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary-dark);
+  margin-bottom: 6px;
+}
+.next-card-med {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+}
+.next-card-time {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.chevron-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.chevron-btn svg { width: 14px; height: 14px; }
+.next-card.collapsed .chevron-btn { transform: rotate(180deg); }
+
+.card-divider {
+  height: 1px;
+  background: var(--border-divider);
+  margin: 16px 0;
+}
+
+.card-expandable {
+  overflow: hidden;
+  max-height: 1000px;
+  transition: max-height 0.3s ease, opacity 0.2s, margin 0.2s;
+  opacity: 1;
+}
+.next-card.collapsed .card-expandable {
+  max-height: 0;
+  opacity: 0;
+}
+.next-card.collapsed .card-divider {
+  display: none;
+}
+
+.sub-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary-dark);
+  margin-bottom: 8px;
+}
+
+.adj-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.adj-btn {
+  flex: 1;
+  min-height: 50px;
+  background: var(--bg-soft);
+  border: 1.5px solid var(--primary-soft);
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary-darker-text);
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.1s, background 0.15s;
+}
+.adj-btn:active { transform: scale(0.96); background: var(--primary-soft); }
+
+.custom-time-btn {
+  width: 100%;
+  min-height: 50px;
+  background: transparent;
+  border: 1.5px solid var(--primary-soft);
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  transition: background 0.15s;
+}
+.custom-time-btn:active { background: var(--bg-soft); }
+
+.profile-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.profile-btn {
+  flex: 1;
+  min-height: 54px;
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s;
+}
+.profile-btn .icon {
+  font-size: 16px;
+  line-height: 1;
+}
+.profile-btn.on {
+  background: var(--primary-soft);
+  color: var(--primary-darkest-text);
+  border: 1.5px solid var(--primary);
+}
+.profile-btn.off {
+  background: var(--bg-soft);
+  color: var(--text-secondary);
+  border: 1.5px solid var(--primary-soft);
+}
+
+.silence-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  min-height: 54px;
+}
+.silence-icon-circle {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--border-strong);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.silence-icon-circle svg { width: 14px; height: 14px; fill: white; }
+.silence-row.on .silence-icon-circle { background: var(--text-muted); }
+.silence-text {
+  flex: 1;
+  font-size: 16px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+.toggle {
+  width: 50px; height: 30px; border-radius: 15px;
+  background: var(--border-strong);
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.toggle.on { background: var(--text-muted); }
+.toggle-thumb {
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  transition: left 0.2s;
+}
+.toggle.on .toggle-thumb { left: 23px; }
+
+.dose-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.dose-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  min-height: 64px;
+}
+.dose-row.active-row {
+  border-color: var(--primary);
+  background: #FFFAF5;
+  border-width: 1.5px;
+}
+.dose-row.missed-row {
+  border-color: var(--error);
+  background: var(--bg-error);
+}
+.status-dot {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-done { background: var(--positive); }
+.dot-active { background: var(--primary); }
+.dot-future { background: transparent; border: 2px solid var(--border-strong); }
+.dot-missed { background: var(--error); }
+
+.dose-info { flex: 1; min-width: 0; }
+.dose-time {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+.dose-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dose-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 11px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.badge-done { background: var(--bg-positive); color: var(--positive-dark); }
+.badge-due { background: var(--bg-soft); color: var(--primary-darker-text); }
+.badge-missed { background: var(--bg-error); color: var(--error-dark); }
+.badge-manual { background: var(--bg-neutral); color: var(--text-muted); }
+.badge-scheduled { background: var(--bg-neutral); color: var(--text-muted); }
+
+.nav-bar {
+  display: flex;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  padding-bottom: 6px;
+}
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 0 8px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  transition: opacity 0.15s;
+}
+.nav-icon {
+  width: 24px; height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-icon svg { width: 22px; height: 22px; }
+.nav-icon path { fill: var(--text-secondary); }
+.nav-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.nav-item.active .nav-icon path { fill: var(--primary); }
+.nav-item.active .nav-label { color: var(--primary); }
+
+.alarm-screen {
+  background: var(--bg);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 22px 24px;
+  text-align: center;
+  overflow-y: auto;
+}
+
+.pill-ring {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--bg-soft);
+  border: 2px solid var(--primary-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  position: relative;
+  animation: gentlePulse 2s ease-in-out infinite;
+}
+@keyframes gentlePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200, 145, 79, 0.3); }
+  50% { box-shadow: 0 0 0 12px rgba(200, 145, 79, 0); }
+}
+.pill-shape {
+  width: 38px; height: 17px;
+  border-radius: 9px;
+  background: var(--primary);
+  position: relative;
+  overflow: hidden;
+}
+.pill-shape::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  width: 2px; height: 100%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.alarm-kicker {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary-dark);
+  margin-bottom: 8px;
+}
+.alarm-med {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+}
+.alarm-context {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  margin-bottom: 22px;
+  font-weight: 500;
+}
+
+.silent-pill {
+  display: none;
+  background: var(--bg-neutral);
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 18px;
+  align-items: center;
+  gap: 6px;
+}
+.silent-pill.show { display: inline-flex; }
+.silent-pill svg { width: 14px; height: 14px; }
+
+.nfc-card {
+  width: 100%;
+  background: var(--bg-card);
+  border: 2px solid var(--primary);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 14px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.nfc-card:active { transform: scale(0.98); }
+
+.nfc-icon-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.phone-icon-shape {
+  width: 24px; height: 34px;
+  border-radius: 5px;
+  border: 3px solid var(--primary);
+  position: relative;
+}
+.phone-icon-shape::after {
+  content: '';
+  position: absolute;
+  bottom: 3px; left: 50%;
+  transform: translateX(-50%);
+  width: 8px; height: 2px;
+  background: var(--primary);
+  border-radius: 1px;
+}
+.nfc-waves {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+.nfc-waves .wave {
+  border-radius: 1px;
+  background: var(--primary);
+  animation: waveAnim 1.5s ease-in-out infinite;
+}
+.nfc-waves .wave:nth-child(1) { width: 6px; height: 7px; animation-delay: 0s; }
+.nfc-waves .wave:nth-child(2) { width: 6px; height: 12px; animation-delay: 0.2s; }
+.nfc-waves .wave:nth-child(3) { width: 6px; height: 17px; animation-delay: 0.4s; }
+@keyframes waveAnim {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+.pillbox-icon-shape {
+  width: 36px; height: 26px;
+  border-radius: 5px;
+  border: 3px solid var(--primary);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  padding: 3px;
+}
+.pb-cell { border-radius: 2px; background: var(--border); }
+
+.nfc-main-text {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  letter-spacing: -0.005em;
+}
+.nfc-sub-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.vol-section {
+  margin-bottom: 18px;
+}
+.vol-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 5px;
+  height: 22px;
+  margin-bottom: 5px;
+}
+.vol-bar {
+  width: 9px;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background 0.5s, height 0.5s;
+}
+.vol-bar.lit { background: var(--primary); }
+.vol-text {
+  font-size: 13px;
+  color: var(--primary-dark);
+  font-weight: 500;
+}
+
+.or-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+.or-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.or-label {
+  font-size: 13px;
+  color: var(--primary-dark);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.manual-btn {
+  width: 100%;
+  min-height: var(--tap-min);
+  background: transparent;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  font-size: 16px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  margin-bottom: 14px;
+  transition: background 0.15s;
+}
+.manual-btn:active { background: var(--bg-soft); }
+
+.contract-line {
+  font-size: 13px;
+  color: var(--primary-dark);
+  font-weight: 500;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+.manual-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 22px 24px;
+  overflow-y: auto;
+}
+
+.back-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 22px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  padding: 4px 0;
+}
+.back-arrow {
+  font-size: 22px;
+  color: var(--primary);
+  line-height: 1;
+}
+.back-label {
+  font-size: 16px;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.manual-q {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.35;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+.manual-hint {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 22px;
+  font-weight: 500;
+}
+
+.med-checklist {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 4px 18px;
+  margin-bottom: 24px;
+}
+.med-check-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-divider);
+  min-height: 60px;
+}
+.med-check-row:last-child { border-bottom: none; }
+.check-circle {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--bg-positive);
+  border: 2px solid var(--positive);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.check-circle svg { width: 14px; height: 14px; }
+.med-check-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.btn-primary-large {
+  width: 100%;
+  min-height: 60px;
+  background: var(--primary);
+  border-radius: var(--radius-md);
+  border: none;
+  padding: 18px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--primary-text-on);
+  cursor: pointer;
+  font-family: inherit;
+  margin-bottom: 12px;
+  transition: transform 0.1s, background 0.15s;
+}
+.btn-primary-large:active {
+  transform: scale(0.98);
+  background: var(--primary-dark);
+}
+
+.btn-secondary-large {
+  width: 100%;
+  min-height: var(--tap-min);
+  background: transparent;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  font-size: 16px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+.btn-secondary-large:active { background: var(--bg-soft); }
+
+.confirmed-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 22px;
+  text-align: center;
+}
+
+.confirmed-ring {
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: var(--bg-positive);
+  border: 2px solid var(--positive-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+  animation: confirmPop 0.5s ease-out;
+}
+@keyframes confirmPop {
+  0% { transform: scale(0.6); opacity: 0; }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.check-big {
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  background: var(--positive);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.check-big svg { width: 22px; height: 22px; fill: white; }
+
+.confirmed-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+.confirmed-meds {
+  font-size: 17px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  line-height: 1.55;
+  margin-bottom: 12px;
+}
+.confirm-tag {
+  background: var(--bg-neutral);
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.confirm-tag.via-pillbox {
+  background: var(--bg-positive);
+  color: var(--positive-dark);
+}
+.confirm-tag svg { width: 12px; height: 12px; }
+
+.eat-hint {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+  line-height: 1.6;
+  max-width: 280px;
+}
+.eat-hint strong { color: var(--text-primary); font-weight: 700; }
+
+.eat-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 22px;
+  text-align: center;
+  background: var(--bg-eat);
+}
+.eat-ring {
+  width: 96px; height: 96px;
+  border-radius: 50%;
+  background: var(--bg-positive);
+  border: 2px solid var(--positive-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+  font-size: 42px;
+  animation: confirmPop 0.5s ease-out;
+}
+.eat-kicker {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--positive-mid);
+  margin-bottom: 8px;
+}
+.eat-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--positive-text);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+.eat-sub {
+  font-size: 16px;
+  color: var(--positive-sub);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  max-width: 280px;
+  font-weight: 500;
+}
+.btn-eat {
+  width: 100%;
+  min-height: 60px;
+  background: var(--positive);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 18px;
+  font-size: 17px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.1s, background 0.15s;
+}
+.btn-eat:active { transform: scale(0.98); background: var(--positive-mid); }
+
+.history-day {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  padding: 16px 18px;
+  margin-bottom: 12px;
+}
+.history-day-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.history-day-label {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.005em;
+}
+.history-day-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.history-dots {
+  display: flex;
+  gap: 5px;
+}
+.hdot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+}
+.hdot-done { background: var(--positive); }
+.hdot-missed { background: var(--error); }
+.hdot-manual { background: var(--text-muted); opacity: 0.5; }
+.hdot-upcoming { background: var(--primary-soft); border: 1.5px solid var(--primary); }
+.hdot-future { background: var(--border-divider); }
+.history-score {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.history-entry {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-divider-soft);
+}
+.history-entry:last-child { border-bottom: none; }
+.h-time {
+  font-size: 13px;
+  color: var(--text-secondary);
+  width: 44px;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+.h-name {
+  font-size: 15px;
+  color: var(--text-primary);
+  flex: 1;
+  font-weight: 500;
+}
+
+.settings-section {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.settings-row {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-divider);
+  gap: 14px;
+  cursor: pointer;
+  min-height: 64px;
+  background: transparent;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  width: 100%;
+  font-family: inherit;
+  text-align: left;
+}
+.settings-row:last-child { border-bottom: none; }
+.settings-icon-box {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: var(--bg-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.settings-icon-box svg { width: 18px; height: 18px; }
+.settings-icon-box svg path { fill: var(--primary); }
+.settings-text { flex: 1; min-width: 0; }
+.settings-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.settings-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  font-weight: 500;
+}
+.settings-value {
+  font-size: 15px;
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+.settings-value-arrow {
+  font-size: 18px;
+  color: var(--text-secondary);
+}
+
+.radio-group {
+  padding: 4px 18px 14px;
+}
+.radio-opt {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-divider);
+  cursor: pointer;
+  background: transparent;
+  border-left: none; border-right: none; border-top: none;
+  width: 100%;
+  font-family: inherit;
+  text-align: left;
+  min-height: 54px;
+}
+.radio-opt:last-child { border-bottom: none; }
+.radio-outer {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border-strong);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s;
+}
+.radio-outer.selected { border-color: var(--primary); }
+.radio-inner {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: none;
+}
+.radio-outer.selected .radio-inner { display: block; }
+.radio-text {
+  font-size: 16px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.relatives-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  padding: 6px 18px;
+  margin-bottom: 12px;
+}
+.rel-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-divider);
+}
+.rel-row:last-child { border-bottom: none; }
+.rel-time {
+  font-size: 13px;
+  color: var(--text-secondary);
+  width: 44px;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+.rel-name-text {
+  font-size: 16px;
+  color: var(--text-primary);
+  flex: 1;
+  font-weight: 500;
+}
+
+.summary-line {
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 12px 0;
+  font-weight: 500;
+}
+
+.dev-panel {
+  width: 100%;
+  max-width: 380px;
+  margin-top: 24px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(176, 120, 69, 0.2);
+}
+.dev-panel-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  text-align: center;
+}
+.dev-panel-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.dev-btn {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-deep);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.dev-btn:active { background: var(--bg-soft); }
+.dev-btn.primary {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+.dev-btn.eat {
+  background: var(--positive);
+  color: white;
+  border-color: var(--positive);
+}
+
+/* === SHIFT SELECTION ACTIVE STATE === */
+.adj-btn.selected {
+  background: var(--primary);
+  color: var(--primary-text-on);
+  border-color: var(--primary);
+}
+
+.shift-feedback {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-soft);
+  border: 1.5px solid var(--primary-soft);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+.shift-feedback.show { display: flex; }
+.shift-feedback-text {
+  font-size: 14px;
+  color: var(--primary-darkest-text);
+  font-weight: 600;
+}
+.shift-feedback-text strong { font-weight: 700; }
+.reset-btn {
+  background: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.next-card-time.shifted {
+  color: var(--primary-darkest-text);
+  font-weight: 600;
+}
+
+/* === SILENCE ALL TODAY BANNER === */
+.silence-all-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  margin-bottom: 12px;
+  cursor: pointer;
+  min-height: 60px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.silence-all-banner.on {
+  background: var(--bg-neutral);
+  border-color: var(--text-muted);
+}
+.silence-all-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--bg-soft);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.silence-all-banner.on .silence-all-icon {
+  background: var(--text-muted);
+}
+.silence-all-icon svg { width: 18px; height: 18px; }
+.silence-all-icon svg path { fill: var(--primary); transition: fill 0.15s; }
+.silence-all-banner.on .silence-all-icon svg path { fill: white; }
+.silence-all-text {
+  flex: 1;
+}
+.silence-all-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.silence-all-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+/* === SCHEDULE SCREEN === */
+.routine-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  position: relative;
+}
+.routine-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.routine-time-block {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.routine-time {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+.routine-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--primary-dark);
+}
+.routine-meal-anchor {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  background: var(--bg-soft);
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+.routine-meds {
+  font-size: 15px;
+  color: var(--text-deep);
+  font-weight: 500;
+  line-height: 1.5;
+  padding-top: 6px;
+  border-top: 1px dashed var(--border-divider);
+}
+
+.timeline-wrap {
+  position: relative;
+  padding-left: 4px;
+  margin-top: 6px;
+}
+
+/* === BOTTOM SHEET MODAL === */
+.sheet-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(60, 40, 20, 0.45);
+  z-index: 200;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.2s ease-out;
+}
+.sheet-overlay.active { display: flex; }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.sheet-card {
+  width: 100%;
+  background: var(--bg);
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+  padding: 22px 22px 28px;
+  animation: slideUp 0.25s ease-out;
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.sheet-handle {
+  width: 40px; height: 4px;
+  border-radius: 2px;
+  background: var(--border-strong);
+  margin: 0 auto 16px;
+}
+.sheet-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 4px;
+  letter-spacing: -0.005em;
+}
+.sheet-sub {
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 22px;
+  font-weight: 500;
+}
+
+.time-input-wrap {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.time-input-wrap input[type="time"] {
+  font-family: inherit;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  border: none;
+  background: transparent;
+  text-align: center;
+  letter-spacing: 0.02em;
+  width: 140px;
+}
+.time-input-wrap input[type="time"]:focus {
+  outline: none;
+}
+
+.sheet-buttons {
+  display: flex;
+  gap: 10px;
+}
+.sheet-btn {
+  flex: 1;
+  min-height: var(--tap-min);
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  padding: 16px;
+}
+.sheet-btn-cancel {
+  background: transparent;
+  border: 1.5px solid var(--border-strong);
+  color: var(--text-secondary);
+}
+.sheet-btn-save {
+  background: var(--primary);
+  color: var(--primary-text-on);
+}
+
+/* === ALARM PROFILE EDITOR === */
+.profile-editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 0 20px 24px;
+}
+.editor-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0 14px;
+}
+.editor-back {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  font-size: 16px;
+  font-weight: 600;
+  padding: 6px 0;
+}
+.editor-title-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+.editor-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary-dark);
+  margin-bottom: 4px;
+}
+.editor-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.sound-list {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+.sound-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-divider);
+  cursor: pointer;
+  background: transparent;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  width: 100%;
+  font-family: inherit;
+  text-align: left;
+  min-height: 60px;
+}
+.sound-item:last-child { border-bottom: none; }
+.sound-radio {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border-strong);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s;
+}
+.sound-radio.selected { border-color: var(--primary); }
+.sound-radio-inner {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: none;
+}
+.sound-radio.selected .sound-radio-inner { display: block; }
+.sound-info { flex: 1; }
+.sound-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.sound-preview-btn {
+  background: var(--bg-soft);
+  border: 1px solid var(--primary-soft);
+  border-radius: 50%;
+  width: 36px; height: 36px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: inherit;
+}
+.sound-preview-btn svg { width: 14px; height: 14px; }
+.sound-preview-btn svg path { fill: var(--primary); }
+
+.escalation-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  margin-bottom: 18px;
+}
+.escalation-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+.escalation-opt {
+  min-height: 64px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 4px;
+}
+.escalation-opt.off {
+  background: var(--bg-soft);
+  color: var(--text-secondary);
+  border: 1.5px solid var(--primary-soft);
+}
+.escalation-opt.on {
+  background: var(--primary);
+  color: var(--primary-text-on);
+  border: 1.5px solid var(--primary);
+}
+.escalation-opt-time {
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+/* === LOCK SCREEN === */
+.lock-screen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse at top, #5C4530 0%, #2C2418 60%, #1A1410 100%);
+  color: white;
+  padding: 60px 24px 30px;
+  z-index: 250;
+  overflow: hidden;
+}
+.lock-screen.active { display: flex; }
+.lock-time {
+  font-size: 76px;
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 8px;
+  font-family: -apple-system, sans-serif;
+}
+.lock-date {
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 36px;
+}
+
+.lock-notification {
+  background: rgba(255, 248, 243, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 22px;
+  padding: 20px 18px 18px;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+.lock-notif-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.lock-notif-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.lock-notif-icon-pill {
+  width: 18px; height: 8px;
+  border-radius: 4px;
+  background: white;
+  position: relative;
+}
+.lock-notif-icon-pill::after {
+  content: ''; position: absolute;
+  top: 0; left: 50%;
+  width: 1px; height: 100%;
+  background: rgba(200, 145, 79, 0.5);
+}
+.lock-notif-app {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  flex: 1;
+}
+.lock-notif-time {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.lock-notif-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  letter-spacing: -0.005em;
+}
+.lock-notif-body {
+  font-size: 15px;
+  color: var(--text-deep);
+  margin-bottom: 14px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.lock-nfc-action {
+  background: var(--primary);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lock-nfc-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.lock-nfc-phone {
+  width: 14px; height: 20px;
+  border-radius: 3px;
+  border: 2px solid white;
+}
+.lock-nfc-waves {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+}
+.lock-nfc-waves div {
+  width: 3px;
+  border-radius: 1px;
+  background: white;
+}
+.lock-nfc-pillbox {
+  width: 22px; height: 16px;
+  border-radius: 3px;
+  border: 2px solid white;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  padding: 2px;
+}
+.lock-nfc-pillbox div {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 1px;
+}
+.lock-nfc-text {
+  flex: 1;
+  color: white;
+}
+.lock-nfc-main {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 1px;
+}
+.lock-nfc-sub {
+  font-size: 12px;
+  opacity: 0.85;
+  font-weight: 500;
+}
+
+.lock-manual-hint {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 16px;
+  font-weight: 500;
+}
+.lock-bottom-bar {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 130px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 2px;
+}
+.lock-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  border: none;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+@media (max-width: 420px) {
+  body { padding: 0; background: var(--bg); }
+  .brand-bar { display: none; }
+  .phone-shell {
+    border: none;
+    border-radius: 0;
+    height: 100vh;
+    height: 100dvh;
+    box-shadow: none;
+    max-width: 100%;
+  }
+  .notch { display: none; }
+  .status-bar { padding-top: 18px; }
+  .dev-panel {
+    margin-top: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="brand-bar">
+  <div class="brand-name">MedicSync</div>
+  <div class="brand-tag">Interactive prototype · v1</div>
+</div>
+
+<div class="phone-shell">
+  <div class="notch"></div>
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-bar-icons">
+      <span class="signal-dot"></span>
+      <span class="signal-dot"></span>
+      <span class="signal-dot"></span>
+      <span style="font-size:11px;margin:0 4px;font-weight:600;">5G</span>
+      <div class="battery"></div>
+    </div>
+  </div>
+
+  <div class="app-area">
+
+    <div class="screen active" id="screen-home">
+      <div class="scroll">
+        <div class="greeting">
+          <div class="greeting-eyebrow">Good morning,</div>
+          <div class="greeting-name">Sara</div>
+          <div class="greeting-date">Sunday, 3 May</div>
+        </div>
+
+        <div class="section-eyebrow">Next dose</div>
+
+        <div class="next-card" id="next-card">
+          <div class="next-card-header" onclick="toggleNextCard()">
+            <div class="next-card-meds">
+              <div class="next-card-eyebrow">In 1h 25m</div>
+              <div class="next-card-med">Levodopa 100mg</div>
+              <div class="next-card-med">Amantadine 100mg</div>
+              <div class="next-card-time" id="next-card-time">Reminder at 11:30 · lunch at 12:00</div>
+            </div>
+            <button class="chevron-btn" aria-label="Toggle details">
+              <svg viewBox="0 0 14 14" fill="none">
+                <path d="M3 5L7 9L11 5" stroke="#C8914F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="card-expandable">
+            <div class="card-divider"></div>
+
+            <div class="sub-label">Shift lunch time</div>
+            <div class="adj-row">
+              <button class="adj-btn" data-shift="15" onclick="selectShift(15)">+15 min</button>
+              <button class="adj-btn" data-shift="30" onclick="selectShift(30)">+30 min</button>
+              <button class="adj-btn" data-shift="45" onclick="selectShift(45)">+45 min</button>
+            </div>
+            <button class="custom-time-btn" onclick="openMealTimeSheet()">
+              <svg viewBox="0 0 16 16" width="16" height="16" style="margin-right:2px;">
+                <circle cx="8" cy="8" r="6.5" stroke="#8B6E52" stroke-width="1.5" fill="none"/>
+                <path d="M8 4.5V8L10 9.5" stroke="#8B6E52" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span>Set exact time</span>
+            </button>
+
+            <div class="shift-feedback" id="shift-feedback">
+              <div class="shift-feedback-text">
+                Lunch shifted to <strong id="shifted-time">12:00</strong>
+              </div>
+              <button class="reset-btn" onclick="resetShift()">Reset</button>
+            </div>
+
+            <div class="sub-label">Alarm sound</div>
+            <div class="profile-row">
+              <button class="profile-btn on" id="prof-home" onclick="setProfile('home')">
+                <svg width="16" height="16" viewBox="0 0 18 18" style="flex-shrink:0;">
+                  <path d="M9 2L2 7.5V16H7V11H11V16H16V7.5L9 2Z" fill="currentColor"/>
+                </svg>
+                <span>Home</span>
+              </button>
+              <button class="profile-btn off" id="prof-out" onclick="setProfile('out')">
+                <svg width="16" height="16" viewBox="0 0 18 18" style="flex-shrink:0;">
+                  <path d="M9 2C6.5 2 4.5 4 4.5 6.5C4.5 7.5 4.8 8.4 5.4 9.1C4.5 9.6 3.5 10.5 3 12H6V16H8V12H10V16H12V12H15C14.5 10.5 13.5 9.6 12.6 9.1C13.2 8.4 13.5 7.5 13.5 6.5C13.5 4 11.5 2 9 2Z" fill="currentColor"/>
+                </svg>
+                <span>Outdoors</span>
+              </button>
+            </div>
+
+            <div class="silence-row" id="silence-row" onclick="toggleSilence()">
+              <div class="silence-icon-circle" id="silence-icon-circle">
+                <svg id="bell-svg" viewBox="0 0 18 18" width="18" height="18">
+                  <g id="bell-on">
+                    <path d="M9 2C8.4 2 8 2.4 8 3V3.3C5.7 3.8 4 5.7 4 8V11L3 12V13H15V12L14 11V8C14 5.7 12.3 3.8 10 3.3V3C10 2.4 9.6 2 9 2Z" fill="white"/>
+                    <path d="M7.5 14C7.5 14.8 8.2 15.5 9 15.5C9.8 15.5 10.5 14.8 10.5 14H7.5Z" fill="white"/>
+                  </g>
+                  <line id="bell-slash" x1="3" y1="3" x2="15" y2="15" stroke="white" stroke-width="2" stroke-linecap="round" style="display:none;"/>
+                </svg>
+              </div>
+              <div class="silence-text" id="silence-text">Silence this alarm</div>
+              <div class="toggle" id="silence-toggle">
+                <div class="toggle-thumb"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-eyebrow">All doses today</div>
+
+        <div class="silence-all-banner" id="silence-all-banner" onclick="toggleSilenceAll()">
+          <div class="silence-all-icon" id="silence-all-icon">
+            <svg viewBox="0 0 18 18">
+              <g id="silence-all-bell-on">
+                <path d="M9 2C8.4 2 8 2.4 8 3V3.3C5.7 3.8 4 5.7 4 8V11L3 12V13H15V12L14 11V8C14 5.7 12.3 3.8 10 3.3V3C10 2.4 9.6 2 9 2Z"/>
+                <path d="M7.5 14C7.5 14.8 8.2 15.5 9 15.5C9.8 15.5 10.5 14.8 10.5 14H7.5Z"/>
+              </g>
+              <line id="silence-all-slash" x1="3" y1="3" x2="15" y2="15" stroke="white" stroke-width="2" stroke-linecap="round" style="display:none;"/>
+            </svg>
+          </div>
+          <div class="silence-all-text">
+            <div class="silence-all-title" id="silence-all-title">Silence all alarms today</div>
+            <div class="silence-all-sub" id="silence-all-sub">All alarms will sound normally</div>
+          </div>
+          <div class="toggle" id="silence-all-toggle">
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
+
+        <div class="dose-list">
+          <div class="dose-row">
+            <div class="status-dot dot-done"></div>
+            <div class="dose-info">
+              <div class="dose-time">08:00</div>
+              <div class="dose-name">Morning dose</div>
+            </div>
+            <div class="dose-badge badge-done">Taken</div>
+          </div>
+
+          <div class="dose-row active-row" onclick="goAlarm()">
+            <div class="status-dot dot-active"></div>
+            <div class="dose-info">
+              <div class="dose-time">11:30</div>
+              <div class="dose-name">Lunch dose</div>
+            </div>
+            <div class="dose-badge badge-due">Due soon</div>
+          </div>
+
+          <div class="dose-row">
+            <div class="status-dot dot-future"></div>
+            <div class="dose-info">
+              <div class="dose-time">17:00</div>
+              <div class="dose-name">Afternoon dose</div>
+            </div>
+          </div>
+
+          <div class="dose-row">
+            <div class="status-dot dot-future"></div>
+            <div class="dose-info">
+              <div class="dose-time">21:00</div>
+              <div class="dose-name">Night dose</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:8px;"></div>
+      </div>
+
+      <nav class="nav-bar">
+        <button class="nav-item active" onclick="goTo('home')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M11 2L2 9.5V20H8V14H14V20H20V9.5L11 2Z"/></svg>
+          </div>
+          <div class="nav-label">Today</div>
+        </button>
+        <button class="nav-item" onclick="goTo('schedule')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M5 3H17C18.1 3 19 3.9 19 5V17C19 18.1 18.1 19 17 19H5C3.9 19 3 18.1 3 17V5C3 3.9 3.9 3 5 3ZM5 9V17H17V9H5ZM5 5V7H17V5H5ZM7 11H9V13H7V11ZM11 11H13V13H11V11ZM15 11H17V13H15V11Z"/></svg>
+          </div>
+          <div class="nav-label">Schedule</div>
+        </button>
+        <button class="nav-item" onclick="goTo('history')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M11 3C6.6 3 3 6.6 3 11C3 15.4 6.6 19 11 19C15.4 19 19 15.4 19 11C19 6.6 15.4 3 11 3ZM11 5C14.3 5 17 7.7 17 11C17 14.3 14.3 17 11 17C7.7 17 5 14.3 5 11C5 7.7 7.7 5 11 5ZM10 7V11.4L13.6 13.6L14.4 12.2L11.5 10.5V7H10Z"/></svg>
+          </div>
+          <div class="nav-label">History</div>
+        </button>
+        <button class="nav-item" onclick="goTo('settings')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M11 7C8.8 7 7 8.8 7 11C7 13.2 8.8 15 11 15C13.2 15 15 13.2 15 11C15 8.8 13.2 7 11 7ZM18.4 12.4L20 13.6C20.2 13.7 20.2 14 20.1 14.2L18.6 16.8C18.5 17 18.2 17.1 18 17L16 16.3C15.6 16.6 15.2 16.9 14.7 17.1L14.4 19.2C14.4 19.5 14.2 19.6 14 19.6H10C9.8 19.6 9.6 19.5 9.6 19.2L9.3 17.1C8.8 16.9 8.4 16.6 8 16.3L6 17C5.8 17.1 5.5 17 5.4 16.8L3.9 14.2C3.8 14 3.8 13.7 4 13.6L5.6 12.4C5.6 12.2 5.6 11.9 5.6 11.7L5.6 11.6C5.6 11.4 5.6 11.1 5.6 10.9L4 9.6C3.8 9.5 3.8 9.2 3.9 9L5.4 6.4C5.5 6.2 5.8 6.1 6 6.2L8 6.9C8.4 6.6 8.8 6.3 9.3 6.1L9.6 4C9.6 3.7 9.8 3.6 10 3.6H14C14.2 3.6 14.4 3.7 14.4 4L14.7 6.1C15.2 6.3 15.6 6.6 16 6.9L18 6.2C18.2 6.1 18.5 6.2 18.6 6.4L20.1 9C20.2 9.2 20.2 9.5 20 9.6L18.4 10.9C18.4 11.3 18.4 11.7 18.4 12.4Z"/></svg>
+          </div>
+          <div class="nav-label">Settings</div>
+        </button>
+      </nav>
+    </div>
+
+    <div class="screen" id="screen-alarm">
+      <div class="alarm-screen">
+        <div class="pill-ring"><div class="pill-shape"></div></div>
+        <div class="alarm-kicker">Time for your dose</div>
+        <div class="alarm-med">Levodopa 100mg</div>
+        <div class="alarm-med">Amantadine 100mg</div>
+        <div class="alarm-context">Before lunch · 12:00</div>
+
+        <div class="silent-pill" id="silent-pill">
+          <svg viewBox="0 0 14 14"><path d="M2 5V9H4L7 12V2L4 5H2Z" stroke="currentColor" stroke-width="1.5" fill="currentColor"/><path d="M10 4L13 7M13 4L10 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>Silent — vibration only</span>
+        </div>
+
+        <div class="nfc-card" onclick="confirmViaNFC()">
+          <div class="nfc-icon-row">
+            <div class="phone-icon-shape"></div>
+            <div class="nfc-waves">
+              <div class="wave"></div>
+              <div class="wave"></div>
+              <div class="wave"></div>
+            </div>
+            <div class="pillbox-icon-shape">
+              <div class="pb-cell"></div><div class="pb-cell"></div>
+              <div class="pb-cell"></div><div class="pb-cell"></div>
+            </div>
+          </div>
+          <div class="nfc-main-text">Tap phone to pill box</div>
+          <div class="nfc-sub-text">Bring them close together to confirm</div>
+        </div>
+
+        <div class="vol-section">
+          <div class="vol-row" id="vol-row">
+            <div class="vol-bar lit" style="height:5px;"></div>
+            <div class="vol-bar lit" style="height:9px;"></div>
+            <div class="vol-bar lit" style="height:13px;"></div>
+            <div class="vol-bar" style="height:17px;"></div>
+            <div class="vol-bar" style="height:22px;"></div>
+          </div>
+          <div class="vol-text" id="vol-text">Volume escalating</div>
+        </div>
+
+        <div class="or-divider">
+          <div class="or-line"></div>
+          <div class="or-label">not near your pill box?</div>
+          <div class="or-line"></div>
+        </div>
+
+        <button class="manual-btn" onclick="goTo('manual')">
+          Confirm without pill box
+        </button>
+
+        <div class="contract-line">
+          Alarm stays active until your dose is confirmed
+        </div>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-manual">
+      <div class="manual-screen">
+        <button class="back-row" onclick="goTo('alarm')">
+          <span class="back-arrow">←</span>
+          <span class="back-label">Back to alarm</span>
+        </button>
+
+        <div class="manual-q">Did you take all your medications?</div>
+        <div class="manual-hint">Confirm each one before continuing. This will be logged as a manual confirmation.</div>
+
+        <div class="med-checklist">
+          <div class="med-check-row">
+            <div class="check-circle">
+              <svg viewBox="0 0 14 14"><path d="M3 7L6 10L11 4" stroke="#27500A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+            </div>
+            <div class="med-check-name">Levodopa 100mg</div>
+          </div>
+          <div class="med-check-row">
+            <div class="check-circle">
+              <svg viewBox="0 0 14 14"><path d="M3 7L6 10L11 4" stroke="#27500A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+            </div>
+            <div class="med-check-name">Amantadine 100mg</div>
+          </div>
+        </div>
+
+        <button class="btn-primary-large" onclick="confirmManual()">
+          Yes, I took them all
+        </button>
+        <button class="btn-secondary-large" onclick="goTo('alarm')">
+          Not yet — go back
+        </button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-confirmed">
+      <div class="confirmed-screen">
+        <div class="confirmed-ring">
+          <div class="check-big">
+            <svg viewBox="0 0 22 22"><path d="M5 11L9 15L17 7" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+          </div>
+        </div>
+        <div class="confirmed-title">Dose confirmed</div>
+        <div class="confirmed-meds">
+          Levodopa 100mg<br>
+          Amantadine 100mg
+        </div>
+        <div class="confirm-tag" id="confirm-tag">
+          <span id="confirm-tag-text">Logged via pill box</span>
+        </div>
+        <div class="eat-hint" id="eat-hint">
+          You can eat at <strong>12:00</strong>.<br>
+          We'll let you know when it's time.
+        </div>
+        <button class="btn-primary-large" onclick="goTo('home')">OK</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-eat">
+      <div class="eat-screen">
+        <div class="eat-ring">🍽️</div>
+        <div class="eat-kicker">All clear</div>
+        <div class="eat-title">Time to eat!</div>
+        <div class="eat-sub">It has been 30 minutes since your Levodopa dose.<br><br>Enjoy your lunch.</div>
+        <button class="btn-eat" onclick="goTo('home')">OK, thank you</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-history">
+      <div class="scroll">
+        <div class="greeting">
+          <div class="greeting-name">History</div>
+          <div class="greeting-date">Last 30 days</div>
+        </div>
+
+        <div style="height:14px;"></div>
+
+        <div class="history-day">
+          <div class="history-day-head">
+            <div class="history-day-label">Today · 3 May</div>
+            <div class="history-day-meta">
+              <div class="history-dots">
+                <div class="hdot hdot-done"></div>
+                <div class="hdot hdot-upcoming"></div>
+                <div class="hdot hdot-future"></div>
+                <div class="hdot hdot-future"></div>
+              </div>
+              <div class="history-score">1/4</div>
+            </div>
+          </div>
+          <div class="history-entry">
+            <div class="h-time">08:00</div>
+            <div class="h-name">Morning dose</div>
+            <div class="dose-badge badge-done">Taken</div>
+          </div>
+          <div class="history-entry">
+            <div class="h-time">11:30</div>
+            <div class="h-name">Lunch dose</div>
+            <div class="dose-badge badge-due">Upcoming</div>
+          </div>
+        </div>
+
+        <div class="history-day">
+          <div class="history-day-head">
+            <div class="history-day-label">Yesterday · 2 May</div>
+            <div class="history-day-meta">
+              <div class="history-dots">
+                <div class="hdot hdot-done"></div>
+                <div class="hdot hdot-manual"></div>
+                <div class="hdot hdot-done"></div>
+                <div class="hdot hdot-done"></div>
+              </div>
+              <div class="history-score">4/4</div>
+            </div>
+          </div>
+          <div class="history-entry">
+            <div class="h-time">08:00</div>
+            <div class="h-name">Morning dose</div>
+            <div class="dose-badge badge-done">Taken</div>
+          </div>
+          <div class="history-entry">
+            <div class="h-time">12:15</div>
+            <div class="h-name">Lunch dose</div>
+            <div class="dose-badge badge-manual">Manual</div>
+          </div>
+          <div class="history-entry">
+            <div class="h-time">17:00</div>
+            <div class="h-name">Afternoon dose</div>
+            <div class="dose-badge badge-done">Taken</div>
+          </div>
+          <div class="history-entry">
+            <div class="h-time">21:00</div>
+            <div class="h-name">Night dose</div>
+            <div class="dose-badge badge-done">Taken</div>
+          </div>
+        </div>
+
+        <div class="history-day">
+          <div class="history-day-head">
+            <div class="history-day-label">1 May</div>
+            <div class="history-day-meta">
+              <div class="history-dots">
+                <div class="hdot hdot-done"></div>
+                <div class="hdot hdot-missed"></div>
+                <div class="hdot hdot-done"></div>
+                <div class="hdot hdot-done"></div>
+              </div>
+              <div class="history-score">3/4</div>
+            </div>
+          </div>
+          <div class="history-entry">
+            <div class="h-time">08:00</div>
+            <div class="h-name">Morning dose</div>
+            <div class="dose-badge badge-done">Taken</div>
+          </div>
+          <div class="history-entry">
+            <div class="h-time">12:00</div>
+            <div class="h-name">Lunch dose</div>
+            <div class="dose-badge badge-missed">Missed</div>
+          </div>
+          <div class="history-entry">
+            <div class="h-time">17:00</div>
+            <div class="h-name">Afternoon dose</div>
+            <div class="dose-badge badge-done">Taken</div>
+          </div>
+          <div class="history-entry">
+            <div class="h-time">21:00</div>
+            <div class="h-name">Night dose</div>
+            <div class="dose-badge badge-done">Taken</div>
+          </div>
+        </div>
+
+        <div class="history-day">
+          <div class="history-day-head">
+            <div class="history-day-label">30 Apr</div>
+            <div class="history-day-meta">
+              <div class="history-dots">
+                <div class="hdot hdot-done"></div>
+                <div class="hdot hdot-done"></div>
+                <div class="hdot hdot-done"></div>
+                <div class="hdot hdot-done"></div>
+              </div>
+              <div class="history-score">4/4</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:8px;"></div>
+      </div>
+
+      <nav class="nav-bar">
+        <button class="nav-item" onclick="goTo('home')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M11 2L2 9.5V20H8V14H14V20H20V9.5L11 2Z"/></svg>
+          </div>
+          <div class="nav-label">Today</div>
+        </button>
+        <button class="nav-item" onclick="goTo('schedule')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M5 3H17C18.1 3 19 3.9 19 5V17C19 18.1 18.1 19 17 19H5C3.9 19 3 18.1 3 17V5C3 3.9 3.9 3 5 3ZM5 9V17H17V9H5ZM5 5V7H17V5H5ZM7 11H9V13H7V11ZM11 11H13V13H11V11ZM15 11H17V13H15V11Z"/></svg>
+          </div>
+          <div class="nav-label">Schedule</div>
+        </button>
+        <button class="nav-item active" onclick="goTo('history')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M11 3C6.6 3 3 6.6 3 11C3 15.4 6.6 19 11 19C15.4 19 19 15.4 19 11C19 6.6 15.4 3 11 3ZM11 5C14.3 5 17 7.7 17 11C17 14.3 14.3 17 11 17C7.7 17 5 14.3 5 11C5 7.7 7.7 5 11 5ZM10 7V11.4L13.6 13.6L14.4 12.2L11.5 10.5V7H10Z"/></svg>
+          </div>
+          <div class="nav-label">History</div>
+        </button>
+        <button class="nav-item" onclick="goTo('settings')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M11 7C8.8 7 7 8.8 7 11C7 13.2 8.8 15 11 15C13.2 15 15 13.2 15 11C15 8.8 13.2 7 11 7ZM18.4 12.4L20 13.6C20.2 13.7 20.2 14 20.1 14.2L18.6 16.8C18.5 17 18.2 17.1 18 17L16 16.3C15.6 16.6 15.2 16.9 14.7 17.1L14.4 19.2C14.4 19.5 14.2 19.6 14 19.6H10C9.8 19.6 9.6 19.5 9.6 19.2L9.3 17.1C8.8 16.9 8.4 16.6 8 16.3L6 17C5.8 17.1 5.5 17 5.4 16.8L3.9 14.2C3.8 14 3.8 13.7 4 13.6L5.6 12.4C5.6 12.2 5.6 11.9 5.6 11.7L5.6 11.6C5.6 11.4 5.6 11.1 5.6 10.9L4 9.6C3.8 9.5 3.8 9.2 3.9 9L5.4 6.4C5.5 6.2 5.8 6.1 6 6.2L8 6.9C8.4 6.6 8.8 6.3 9.3 6.1L9.6 4C9.6 3.7 9.8 3.6 10 3.6H14C14.2 3.6 14.4 3.7 14.4 4L14.7 6.1C15.2 6.3 15.6 6.6 16 6.9L18 6.2C18.2 6.1 18.5 6.2 18.6 6.4L20.1 9C20.2 9.2 20.2 9.5 20 9.6L18.4 10.9C18.4 11.3 18.4 11.7 18.4 12.4Z"/></svg>
+          </div>
+          <div class="nav-label">Settings</div>
+        </button>
+      </nav>
+    </div>
+
+    <div class="screen" id="screen-settings">
+      <div class="scroll">
+        <div class="greeting">
+          <div class="greeting-name">Settings</div>
+        </div>
+
+        <div class="section-eyebrow">Medication timing</div>
+        <div class="settings-section">
+          <div class="settings-row" style="cursor:default;">
+            <div class="settings-icon-box">
+              <svg viewBox="0 0 18 18"><path d="M9 2C5.1 2 2 5.1 2 9C2 12.9 5.1 16 9 16C12.9 16 16 12.9 16 9C16 5.1 12.9 2 9 2ZM9 4C11.8 4 14 6.2 14 9C14 11.8 11.8 14 9 14C6.2 14 4 11.8 4 9C4 6.2 6.2 4 9 4ZM8 5V9.4L11.6 11.6L12.4 10.2L9.5 8.5V5H8Z"/></svg>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Meal preference</div>
+              <div class="settings-sub">When to take medication</div>
+            </div>
+          </div>
+          <div class="radio-group">
+            <button class="radio-opt" onclick="setTiming(0)">
+              <div class="radio-outer selected" id="timing-0"><div class="radio-inner"></div></div>
+              <div class="radio-text">30 min before meal</div>
+            </button>
+            <button class="radio-opt" onclick="setTiming(1)">
+              <div class="radio-outer" id="timing-1"><div class="radio-inner"></div></div>
+              <div class="radio-text">1 hour after meal</div>
+            </button>
+          </div>
+        </div>
+
+        <div class="section-eyebrow">Default meal times</div>
+        <div class="settings-section">
+          <button class="settings-row" onclick="openMealTimeSheet('breakfast')">
+            <div class="settings-icon-box">
+              <svg viewBox="0 0 18 18"><path d="M9 1L11 6L16 6L12 9L13 14L9 11L5 14L6 9L2 6L7 6Z"/></svg>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Breakfast</div>
+            </div>
+            <div class="settings-value" id="meal-breakfast">07:30</div>
+          </button>
+          <button class="settings-row" onclick="openMealTimeSheet('lunch')">
+            <div class="settings-icon-box">
+              <svg viewBox="0 0 18 18"><path d="M9 2C5.1 2 2 5.1 2 9C2 12.9 5.1 16 9 16C12.9 16 16 12.9 16 9C16 5.1 12.9 2 9 2Z"/></svg>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Lunch</div>
+            </div>
+            <div class="settings-value" id="meal-lunch">12:00</div>
+          </button>
+          <button class="settings-row" onclick="openMealTimeSheet('dinner')">
+            <div class="settings-icon-box">
+              <svg viewBox="0 0 18 18"><path d="M14 9C14 11.7 11.7 14 9 14C7.5 14 6.1 13.3 5.2 12.2C5.6 12.3 6 12.4 6.5 12.4C9.5 12.4 12 9.9 12 6.9C12 6.3 11.9 5.7 11.7 5.2C13 6.1 14 7.5 14 9Z"/></svg>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Dinner</div>
+            </div>
+            <div class="settings-value" id="meal-dinner">18:00</div>
+          </button>
+        </div>
+
+        <div class="section-eyebrow">Alarm profiles</div>
+        <div class="settings-section">
+          <button class="settings-row" onclick="openProfileEditor('home')">
+            <div class="settings-icon-box">
+              <svg viewBox="0 0 18 18"><path d="M9 2L2 7.5V16H6V11H12V16H16V7.5L9 2Z"/></svg>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Home</div>
+              <div class="settings-sub" id="home-profile-summary">Gentle chime · slow escalation</div>
+            </div>
+            <div class="settings-value-arrow">›</div>
+          </button>
+          <button class="settings-row" onclick="openProfileEditor('outdoors')">
+            <div class="settings-icon-box">
+              <svg viewBox="0 0 18 18"><path d="M9 2C6.5 2 4.5 4 4.5 6.5C4.5 7.5 4.8 8.4 5.4 9.1C4.5 9.6 3.5 10.5 3 12H6V16H8V12H10V16H12V12H15C14.5 10.5 13.5 9.6 12.6 9.1C13.2 8.4 13.5 7.5 13.5 6.5C13.5 4 11.5 2 9 2Z"/></svg>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Outdoors</div>
+              <div class="settings-sub" id="outdoors-profile-summary">Strong tone · fast escalation</div>
+            </div>
+            <div class="settings-value-arrow">›</div>
+          </button>
+        </div>
+
+        <div class="section-eyebrow">Relatives</div>
+        <div class="settings-section">
+          <div class="settings-row" style="cursor:default;">
+            <div class="settings-icon-box">
+              <svg viewBox="0 0 18 18"><path d="M9 2C7.3 2 6 3.3 6 5C6 6.7 7.3 8 9 8C10.7 8 12 6.7 12 5C12 3.3 10.7 2 9 2ZM9 10C6.3 10 1 11.3 1 14V16H17V14C17 11.3 11.7 10 9 10Z"/></svg>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Notify if dose missed</div>
+              <div class="settings-sub">After 15 minutes</div>
+            </div>
+            <div class="toggle on" style="pointer-events:none;">
+              <div class="toggle-thumb"></div>
+            </div>
+          </div>
+          <button class="settings-row" onclick="goTo('relatives')">
+            <div class="settings-icon-box">
+              <svg viewBox="0 0 18 18"><path d="M9 3C5.7 3 3 4.5 3 6V12C3 13.5 5.7 15 9 15C12.3 15 15 13.5 15 12V6C15 4.5 12.3 3 9 3Z"/></svg>
+            </div>
+            <div class="settings-text">
+              <div class="settings-title">Relatives view</div>
+              <div class="settings-sub">Erik Andersen</div>
+            </div>
+            <div class="settings-value-arrow">›</div>
+          </button>
+        </div>
+
+        <div style="height:12px;"></div>
+      </div>
+
+      <nav class="nav-bar">
+        <button class="nav-item" onclick="goTo('home')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M11 2L2 9.5V20H8V14H14V20H20V9.5L11 2Z"/></svg>
+          </div>
+          <div class="nav-label">Today</div>
+        </button>
+        <button class="nav-item" onclick="goTo('schedule')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M5 3H17C18.1 3 19 3.9 19 5V17C19 18.1 18.1 19 17 19H5C3.9 19 3 18.1 3 17V5C3 3.9 3.9 3 5 3ZM5 9V17H17V9H5ZM5 5V7H17V5H5ZM7 11H9V13H7V11ZM11 11H13V13H11V11ZM15 11H17V13H15V11Z"/></svg>
+          </div>
+          <div class="nav-label">Schedule</div>
+        </button>
+        <button class="nav-item" onclick="goTo('history')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M11 3C6.6 3 3 6.6 3 11C3 15.4 6.6 19 11 19C15.4 19 19 15.4 19 11C19 6.6 15.4 3 11 3ZM11 5C14.3 5 17 7.7 17 11C17 14.3 14.3 17 11 17C7.7 17 5 14.3 5 11C5 7.7 7.7 5 11 5ZM10 7V11.4L13.6 13.6L14.4 12.2L11.5 10.5V7H10Z"/></svg>
+          </div>
+          <div class="nav-label">History</div>
+        </button>
+        <button class="nav-item active" onclick="goTo('settings')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M11 7C8.8 7 7 8.8 7 11C7 13.2 8.8 15 11 15C13.2 15 15 13.2 15 11C15 8.8 13.2 7 11 7ZM18.4 12.4L20 13.6C20.2 13.7 20.2 14 20.1 14.2L18.6 16.8C18.5 17 18.2 17.1 18 17L16 16.3C15.6 16.6 15.2 16.9 14.7 17.1L14.4 19.2C14.4 19.5 14.2 19.6 14 19.6H10C9.8 19.6 9.6 19.5 9.6 19.2L9.3 17.1C8.8 16.9 8.4 16.6 8 16.3L6 17C5.8 17.1 5.5 17 5.4 16.8L3.9 14.2C3.8 14 3.8 13.7 4 13.6L5.6 12.4C5.6 12.2 5.6 11.9 5.6 11.7L5.6 11.6C5.6 11.4 5.6 11.1 5.6 10.9L4 9.6C3.8 9.5 3.8 9.2 3.9 9L5.4 6.4C5.5 6.2 5.8 6.1 6 6.2L8 6.9C8.4 6.6 8.8 6.3 9.3 6.1L9.6 4C9.6 3.7 9.8 3.6 10 3.6H14C14.2 3.6 14.4 3.7 14.4 4L14.7 6.1C15.2 6.3 15.6 6.6 16 6.9L18 6.2C18.2 6.1 18.5 6.2 18.6 6.4L20.1 9C20.2 9.2 20.2 9.5 20 9.6L18.4 10.9C18.4 11.3 18.4 11.7 18.4 12.4Z"/></svg>
+          </div>
+          <div class="nav-label">Settings</div>
+        </button>
+      </nav>
+    </div>
+
+    <div class="screen" id="screen-schedule">
+      <div class="scroll">
+        <div class="greeting">
+          <div class="greeting-name">My Schedule</div>
+          <div class="greeting-date">Your daily routine</div>
+        </div>
+
+        <div class="section-eyebrow">Today's settings</div>
+
+        <div class="silence-all-banner" id="silence-all-banner-2" onclick="toggleSilenceAll()">
+          <div class="silence-all-icon" id="silence-all-icon-2">
+            <svg viewBox="0 0 18 18">
+              <g>
+                <path d="M9 2C8.4 2 8 2.4 8 3V3.3C5.7 3.8 4 5.7 4 8V11L3 12V13H15V12L14 11V8C14 5.7 12.3 3.8 10 3.3V3C10 2.4 9.6 2 9 2Z"/>
+                <path d="M7.5 14C7.5 14.8 8.2 15.5 9 15.5C9.8 15.5 10.5 14.8 10.5 14H7.5Z"/>
+              </g>
+              <line id="silence-all-slash-2" x1="3" y1="3" x2="15" y2="15" stroke="white" stroke-width="2" stroke-linecap="round" style="display:none;"/>
+            </svg>
+          </div>
+          <div class="silence-all-text">
+            <div class="silence-all-title" id="silence-all-title-2">Silence all alarms today</div>
+            <div class="silence-all-sub" id="silence-all-sub-2">All alarms will sound normally</div>
+          </div>
+          <div class="toggle" id="silence-all-toggle-2">
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
+
+        <div class="section-eyebrow">Daily doses</div>
+
+        <div class="routine-card">
+          <div class="routine-card-header">
+            <div class="routine-time-block">
+              <div class="routine-time">08:00</div>
+              <div class="routine-label">Morning</div>
+            </div>
+            <div class="routine-meal-anchor">30 min before breakfast</div>
+          </div>
+          <div class="routine-meds">Levodopa 100mg<br>Amantadine 100mg</div>
+        </div>
+
+        <div class="routine-card">
+          <div class="routine-card-header">
+            <div class="routine-time-block">
+              <div class="routine-time">11:30</div>
+              <div class="routine-label">Lunch</div>
+            </div>
+            <div class="routine-meal-anchor">30 min before lunch</div>
+          </div>
+          <div class="routine-meds">Levodopa 100mg<br>Amantadine 100mg</div>
+        </div>
+
+        <div class="routine-card">
+          <div class="routine-card-header">
+            <div class="routine-time-block">
+              <div class="routine-time">17:00</div>
+              <div class="routine-label">Afternoon</div>
+            </div>
+            <div class="routine-meal-anchor">1 hour before dinner</div>
+          </div>
+          <div class="routine-meds">Levodopa 100mg</div>
+        </div>
+
+        <div class="routine-card">
+          <div class="routine-card-header">
+            <div class="routine-time-block">
+              <div class="routine-time">21:00</div>
+              <div class="routine-label">Night</div>
+            </div>
+            <div class="routine-meal-anchor">After dinner</div>
+          </div>
+          <div class="routine-meds">Levodopa 100mg</div>
+        </div>
+
+        <div style="font-size:13px;color:var(--text-secondary);text-align:center;padding:12px 0 4px;font-weight:500;">
+          To change your routine, go to Settings.
+        </div>
+
+        <div style="height:8px;"></div>
+      </div>
+
+      <nav class="nav-bar">
+        <button class="nav-item" onclick="goTo('home')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M11 2L2 9.5V20H8V14H14V20H20V9.5L11 2Z"/></svg>
+          </div>
+          <div class="nav-label">Today</div>
+        </button>
+        <button class="nav-item active" onclick="goTo('schedule')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M5 3H17C18.1 3 19 3.9 19 5V17C19 18.1 18.1 19 17 19H5C3.9 19 3 18.1 3 17V5C3 3.9 3.9 3 5 3ZM5 9V17H17V9H5ZM5 5V7H17V5H5ZM7 11H9V13H7V11ZM11 11H13V13H11V11ZM15 11H17V13H15V11Z"/></svg>
+          </div>
+          <div class="nav-label">Schedule</div>
+        </button>
+        <button class="nav-item" onclick="goTo('history')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M11 3C6.6 3 3 6.6 3 11C3 15.4 6.6 19 11 19C15.4 19 19 15.4 19 11C19 6.6 15.4 3 11 3ZM11 5C14.3 5 17 7.7 17 11C17 14.3 14.3 17 11 17C7.7 17 5 14.3 5 11C5 7.7 7.7 5 11 5ZM10 7V11.4L13.6 13.6L14.4 12.2L11.5 10.5V7H10Z"/></svg>
+          </div>
+          <div class="nav-label">History</div>
+        </button>
+        <button class="nav-item" onclick="goTo('settings')">
+          <div class="nav-icon">
+            <svg viewBox="0 0 22 22"><path d="M11 7C8.8 7 7 8.8 7 11C7 13.2 8.8 15 11 15C13.2 15 15 13.2 15 11C15 8.8 13.2 7 11 7ZM18.4 12.4L20 13.6C20.2 13.7 20.2 14 20.1 14.2L18.6 16.8C18.5 17 18.2 17.1 18 17L16 16.3C15.6 16.6 15.2 16.9 14.7 17.1L14.4 19.2C14.4 19.5 14.2 19.6 14 19.6H10C9.8 19.6 9.6 19.5 9.6 19.2L9.3 17.1C8.8 16.9 8.4 16.6 8 16.3L6 17C5.8 17.1 5.5 17 5.4 16.8L3.9 14.2C3.8 14 3.8 13.7 4 13.6L5.6 12.4C5.6 12.2 5.6 11.9 5.6 11.7L5.6 11.6C5.6 11.4 5.6 11.1 5.6 10.9L4 9.6C3.8 9.5 3.8 9.2 3.9 9L5.4 6.4C5.5 6.2 5.8 6.1 6 6.2L8 6.9C8.4 6.6 8.8 6.3 9.3 6.1L9.6 4C9.6 3.7 9.8 3.6 10 3.6H14C14.2 3.6 14.4 3.7 14.4 4L14.7 6.1C15.2 6.3 15.6 6.6 16 6.9L18 6.2C18.2 6.1 18.5 6.2 18.6 6.4L20.1 9C20.2 9.2 20.2 9.5 20 9.6L18.4 10.9C18.4 11.3 18.4 11.7 18.4 12.4Z"/></svg>
+          </div>
+          <div class="nav-label">Settings</div>
+        </button>
+      </nav>
+    </div>
+
+    <div class="screen" id="screen-profile-editor">
+      <div class="profile-editor">
+        <div class="editor-header">
+          <button class="editor-back" onclick="goTo('settings')">
+            <span style="font-size:22px;line-height:1;">←</span>
+            <span>Settings</span>
+          </button>
+        </div>
+
+        <div class="editor-title-row">
+          <div class="editor-eyebrow" id="editor-eyebrow">Alarm profile</div>
+          <div class="editor-title" id="editor-title">Home</div>
+        </div>
+
+        <div class="sub-label" style="margin-bottom:10px;">Sound</div>
+        <div class="sound-list" id="sound-list">
+          <button class="sound-item" data-sound="0" onclick="selectSound(0)">
+            <div class="sound-radio selected"><div class="sound-radio-inner"></div></div>
+            <div class="sound-info"><div class="sound-name">Gentle chime</div></div>
+            <button class="sound-preview-btn" onclick="event.stopPropagation();previewSound()">
+              <svg viewBox="0 0 14 14"><path d="M3 3L11 7L3 11Z"/></svg>
+            </button>
+          </button>
+          <button class="sound-item" data-sound="1" onclick="selectSound(1)">
+            <div class="sound-radio"><div class="sound-radio-inner"></div></div>
+            <div class="sound-info"><div class="sound-name">Soft bells</div></div>
+            <button class="sound-preview-btn" onclick="event.stopPropagation();previewSound()">
+              <svg viewBox="0 0 14 14"><path d="M3 3L11 7L3 11Z"/></svg>
+            </button>
+          </button>
+          <button class="sound-item" data-sound="2" onclick="selectSound(2)">
+            <div class="sound-radio"><div class="sound-radio-inner"></div></div>
+            <div class="sound-info"><div class="sound-name">Morning birds</div></div>
+            <button class="sound-preview-btn" onclick="event.stopPropagation();previewSound()">
+              <svg viewBox="0 0 14 14"><path d="M3 3L11 7L3 11Z"/></svg>
+            </button>
+          </button>
+          <button class="sound-item" data-sound="3" onclick="selectSound(3)">
+            <div class="sound-radio"><div class="sound-radio-inner"></div></div>
+            <div class="sound-info"><div class="sound-name">Wind bells</div></div>
+            <button class="sound-preview-btn" onclick="event.stopPropagation();previewSound()">
+              <svg viewBox="0 0 14 14"><path d="M3 3L11 7L3 11Z"/></svg>
+            </button>
+          </button>
+          <button class="sound-item" data-sound="4" onclick="selectSound(4)">
+            <div class="sound-radio"><div class="sound-radio-inner"></div></div>
+            <div class="sound-info"><div class="sound-name">Strong tone</div></div>
+            <button class="sound-preview-btn" onclick="event.stopPropagation();previewSound()">
+              <svg viewBox="0 0 14 14"><path d="M3 3L11 7L3 11Z"/></svg>
+            </button>
+          </button>
+        </div>
+
+        <div class="sub-label" style="margin-bottom:10px;">Volume escalation</div>
+        <div class="escalation-card">
+          <div style="font-size:14px;color:var(--text-secondary);font-weight:500;">How quickly volume increases</div>
+          <div class="escalation-options">
+            <button class="escalation-opt on" data-esc="slow" onclick="selectEscalation('slow')">
+              <div>Slow</div>
+              <div class="escalation-opt-time">Over 5 min</div>
+            </button>
+            <button class="escalation-opt off" data-esc="medium" onclick="selectEscalation('medium')">
+              <div>Medium</div>
+              <div class="escalation-opt-time">Over 3 min</div>
+            </button>
+            <button class="escalation-opt off" data-esc="fast" onclick="selectEscalation('fast')">
+              <div>Fast</div>
+              <div class="escalation-opt-time">Over 1 min</div>
+            </button>
+          </div>
+        </div>
+
+        <button class="btn-primary-large" onclick="saveProfile()" style="margin-top:8px;">
+          Save profile
+        </button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-relatives">
+      <div class="scroll">
+        <div style="padding:18px 0 6px;display:flex;align-items:center;gap:10px;">
+          <button class="back-row" onclick="goTo('settings')" style="margin:0;">
+            <span class="back-arrow">←</span>
+          </button>
+          <div>
+            <div class="greeting-name" style="font-size:24px;">Sara's doses</div>
+            <div class="greeting-date">Sunday, 3 May</div>
+          </div>
+        </div>
+
+        <div style="height:14px;"></div>
+
+        <div class="relatives-card">
+          <div class="rel-row">
+            <div class="rel-time">08:00</div>
+            <div class="rel-name-text">Morning dose</div>
+            <div class="dose-badge badge-done">Taken</div>
+          </div>
+          <div class="rel-row">
+            <div class="rel-time">11:30</div>
+            <div class="rel-name-text">Lunch dose</div>
+            <div class="dose-badge badge-due">Upcoming</div>
+          </div>
+          <div class="rel-row">
+            <div class="rel-time">17:00</div>
+            <div class="rel-name-text">Afternoon dose</div>
+            <div class="dose-badge badge-scheduled">Scheduled</div>
+          </div>
+          <div class="rel-row">
+            <div class="rel-time">21:00</div>
+            <div class="rel-name-text">Night dose</div>
+            <div class="dose-badge badge-scheduled">Scheduled</div>
+          </div>
+        </div>
+
+        <div class="summary-line">
+          Last updated just now · Read only
+        </div>
+      </div>
+    </div>
+
+    <div class="lock-screen" id="lock-screen">
+      <button class="lock-close-btn" onclick="closeLockScreen()">Close preview</button>
+      <div class="lock-time" id="lock-time">11:30</div>
+      <div class="lock-date">Sunday, 3 May</div>
+
+      <div class="lock-notification">
+        <div class="lock-notif-header">
+          <div class="lock-notif-icon">
+            <div class="lock-notif-icon-pill"></div>
+          </div>
+          <div class="lock-notif-app">MedicSync</div>
+          <div class="lock-notif-time">now</div>
+        </div>
+        <div class="lock-notif-title">Time for your dose</div>
+        <div class="lock-notif-body">Levodopa 100mg · Amantadine 100mg<br>Before lunch · 12:00</div>
+
+        <div class="lock-nfc-action">
+          <div class="lock-nfc-icons">
+            <div class="lock-nfc-phone"></div>
+            <div class="lock-nfc-waves">
+              <div style="height:5px;"></div>
+              <div style="height:9px;"></div>
+              <div style="height:13px;"></div>
+            </div>
+            <div class="lock-nfc-pillbox"><div></div><div></div><div></div><div></div></div>
+          </div>
+          <div class="lock-nfc-text">
+            <div class="lock-nfc-main">Tap phone to pill box</div>
+            <div class="lock-nfc-sub">Hold close to confirm</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lock-manual-hint">
+        Open MedicSync to confirm without pill box
+      </div>
+
+      <div class="lock-bottom-bar"></div>
+    </div>
+
+    <div class="sheet-overlay" id="meal-time-sheet" onclick="closeMealTimeSheetIfBackdrop(event)">
+      <div class="sheet-card" onclick="event.stopPropagation()">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title" id="sheet-title">Set lunch time</div>
+        <div class="sheet-sub" id="sheet-sub">Just for today · resets tomorrow</div>
+        <div class="time-input-wrap">
+          <input type="time" id="meal-time-input" value="12:00">
+        </div>
+        <div class="sheet-buttons">
+          <button class="sheet-btn sheet-btn-cancel" onclick="closeMealTimeSheet()">Cancel</button>
+          <button class="sheet-btn sheet-btn-save" onclick="saveMealTimeSheet()">Save</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="dev-panel">
+  <div class="dev-panel-label">Demo controls</div>
+  <div class="dev-panel-row">
+    <button class="dev-btn primary" onclick="triggerAlarm(false)">Trigger alarm</button>
+    <button class="dev-btn" onclick="triggerAlarm(true)">Alarm (silent)</button>
+    <button class="dev-btn" onclick="showLockScreen()">Lock screen view</button>
+    <button class="dev-btn eat" onclick="goTo('eat')">"OK to eat"</button>
+  </div>
+  <div class="dev-panel-row" style="margin-top:8px;">
+    <button class="dev-btn" onclick="resetDemo()" style="grid-column:span 2;">Reset to home</button>
+  </div>
+</div>
+
+<script>
+
+var state = {
+  silenceOn: false,
+  silenceAll: false,
+  shiftSelected: null,
+  mealTimes: { breakfast: '07:30', lunch: '12:00', dinner: '18:00' },
+  customLunchTime: null,
+  profile: 'home',
+  cardCollapsed: false,
+  timing: 0,
+  lastConfirmMethod: 'pillbox',
+  editingProfile: 'home',
+  editingMeal: 'lunch',
+  selectedSound: { home: 0, outdoors: 4 },
+  selectedEscalation: { home: 'slow', outdoors: 'fast' }
+};
+
+var soundNames = ['Gentle chime','Soft bells','Morning birds','Wind bells','Strong tone'];
+var escalationLabels = { slow: 'slow escalation', medium: 'medium escalation', fast: 'fast escalation' };
+
+function goTo(screenId) {
+  closeLockScreen();
+  closeMealTimeSheet();
+  var screens = document.querySelectorAll('.screen');
+  screens.forEach(function(s) { s.classList.remove('active'); });
+  var target = document.getElementById('screen-' + screenId);
+  if (target) target.classList.add('active');
+
+  if (target && target.querySelector('.scroll')) {
+    target.querySelector('.scroll').scrollTop = 0;
+  }
+  if (target && target.querySelector('.profile-editor')) {
+    target.querySelector('.profile-editor').scrollTop = 0;
+  }
+
+  if (screenId === 'alarm') applySilenceVisuals();
+  if (screenId === 'confirmed') {
+    var tagText = document.getElementById('confirm-tag-text');
+    var tag = document.getElementById('confirm-tag');
+    if (state.lastConfirmMethod === 'pillbox') {
+      tagText.textContent = 'Logged via pill box';
+      tag.classList.add('via-pillbox');
+    } else {
+      tagText.textContent = 'Logged manually';
+      tag.classList.remove('via-pillbox');
+    }
+  }
+}
+
+function goAlarm() { goTo('alarm'); }
+
+function toggleNextCard() {
+  state.cardCollapsed = !state.cardCollapsed;
+  var card = document.getElementById('next-card');
+  if (state.cardCollapsed) card.classList.add('collapsed');
+  else card.classList.remove('collapsed');
+}
+
+function selectShift(mins) {
+  state.shiftSelected = mins;
+  state.customLunchTime = null;
+  document.querySelectorAll('.adj-btn').forEach(function(btn) {
+    var s = parseInt(btn.getAttribute('data-shift'), 10);
+    if (s === mins) btn.classList.add('selected');
+    else btn.classList.remove('selected');
+  });
+  updateMealLabel();
+  showShiftFeedback();
+}
+
+function resetShift() {
+  state.shiftSelected = null;
+  state.customLunchTime = null;
+  document.querySelectorAll('.adj-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+  });
+  updateMealLabel();
+  document.getElementById('shift-feedback').classList.remove('show');
+  document.getElementById('next-card-time').classList.remove('shifted');
+}
+
+function showShiftFeedback() {
+  var t = computeLunchTime();
+  document.getElementById('shifted-time').textContent = t;
+  document.getElementById('shift-feedback').classList.add('show');
+  document.getElementById('next-card-time').classList.add('shifted');
+}
+
+function computeLunchTime() {
+  if (state.customLunchTime) return state.customLunchTime;
+  var base = parseTime(state.mealTimes.lunch);
+  if (state.shiftSelected) base += state.shiftSelected;
+  return formatTime(base);
+}
+
+function parseTime(s) {
+  var p = s.split(':');
+  return parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
+}
+function formatTime(mins) {
+  var h = Math.floor(mins / 60), m = mins % 60;
+  return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
+}
+
+function updateMealLabel() {
+  var lunch = computeLunchTime();
+  var lunchMin = parseTime(lunch);
+  var remind = formatTime(lunchMin - 30);
+  document.getElementById('next-card-time').textContent = 'Reminder at ' + remind + ' · lunch at ' + lunch;
+}
+
+function openMealTimeSheet(mealKey) {
+  if (mealKey) {
+    state.editingMeal = mealKey;
+    var labels = { breakfast: 'breakfast', lunch: 'lunch', dinner: 'dinner' };
+    document.getElementById('sheet-title').textContent = 'Set ' + labels[mealKey] + ' time';
+    document.getElementById('sheet-sub').textContent = 'Default for every day';
+    document.getElementById('meal-time-input').value = state.mealTimes[mealKey];
+  } else {
+    state.editingMeal = 'today-lunch';
+    document.getElementById('sheet-title').textContent = 'Set lunch time';
+    document.getElementById('sheet-sub').textContent = 'Just for today · resets tomorrow';
+    document.getElementById('meal-time-input').value = computeLunchTime();
+  }
+  document.getElementById('meal-time-sheet').classList.add('active');
+}
+
+function closeMealTimeSheet() {
+  document.getElementById('meal-time-sheet').classList.remove('active');
+}
+function closeMealTimeSheetIfBackdrop(e) {
+  if (e.target.id === 'meal-time-sheet') closeMealTimeSheet();
+}
+
+function saveMealTimeSheet() {
+  var newTime = document.getElementById('meal-time-input').value;
+  if (!newTime) { closeMealTimeSheet(); return; }
+  if (state.editingMeal === 'today-lunch') {
+    state.customLunchTime = newTime;
+    state.shiftSelected = null;
+    document.querySelectorAll('.adj-btn').forEach(function(btn){ btn.classList.remove('selected'); });
+    updateMealLabel();
+    showShiftFeedback();
+  } else {
+    state.mealTimes[state.editingMeal] = newTime;
+    var el = document.getElementById('meal-' + state.editingMeal);
+    if (el) el.textContent = newTime;
+    if (state.editingMeal === 'lunch') updateMealLabel();
+  }
+  closeMealTimeSheet();
+}
+
+function setProfile(p) {
+  state.profile = p;
+  var home = document.getElementById('prof-home');
+  var out = document.getElementById('prof-out');
+  if (p === 'home') {
+    home.className = 'profile-btn on';
+    out.className = 'profile-btn off';
+  } else {
+    home.className = 'profile-btn off';
+    out.className = 'profile-btn on';
+  }
+}
+
+function toggleSilence() {
+  state.silenceOn = !state.silenceOn;
+  var toggle = document.getElementById('silence-toggle');
+  var row = document.getElementById('silence-row');
+  var slash = document.getElementById('bell-slash');
+  var text = document.getElementById('silence-text');
+  if (state.silenceOn) {
+    toggle.classList.add('on');
+    row.classList.add('on');
+    slash.style.display = 'block';
+    text.textContent = 'This alarm is silenced';
+  } else {
+    toggle.classList.remove('on');
+    row.classList.remove('on');
+    slash.style.display = 'none';
+    text.textContent = 'Silence this alarm';
+  }
+}
+
+function toggleSilenceAll() {
+  state.silenceAll = !state.silenceAll;
+  syncSilenceAllUI();
+}
+
+function syncSilenceAllUI() {
+  ['','-2'].forEach(function(suffix) {
+    var banner = document.getElementById('silence-all-banner' + suffix);
+    var icon = document.getElementById('silence-all-icon' + suffix);
+    var slash = document.getElementById('silence-all-slash' + suffix);
+    var title = document.getElementById('silence-all-title' + suffix);
+    var sub = document.getElementById('silence-all-sub' + suffix);
+    var toggle = document.getElementById('silence-all-toggle' + suffix);
+    if (!banner) return;
+    if (state.silenceAll) {
+      banner.classList.add('on');
+      slash.style.display = 'block';
+      if (sub) sub.textContent = 'All alarms silent · vibration only';
+      if (toggle) toggle.classList.add('on');
+    } else {
+      banner.classList.remove('on');
+      slash.style.display = 'none';
+      if (sub) sub.textContent = 'All alarms will sound normally';
+      if (toggle) toggle.classList.remove('on');
+    }
+  });
+}
+
+function applySilenceVisuals() {
+  var pill = document.getElementById('silent-pill');
+  var volText = document.getElementById('vol-text');
+  var bars = document.querySelectorAll('#vol-row .vol-bar');
+  var silentMode = state.silenceOn || state.silenceAll;
+  if (silentMode) {
+    pill.classList.add('show');
+    volText.textContent = 'Silent — vibration only';
+    bars.forEach(function(b) { b.classList.remove('lit'); });
+  } else {
+    pill.classList.remove('show');
+    volText.textContent = 'Volume escalating';
+    bars.forEach(function(b, i) {
+      if (i < 3) b.classList.add('lit');
+      else b.classList.remove('lit');
+    });
+  }
+}
+
+function setTiming(i) {
+  state.timing = i;
+  document.getElementById('timing-0').className = i === 0 ? 'radio-outer selected' : 'radio-outer';
+  document.getElementById('timing-1').className = i === 1 ? 'radio-outer selected' : 'radio-outer';
+  document.getElementById('timing-0').innerHTML = '<div class="radio-inner"></div>';
+  document.getElementById('timing-1').innerHTML = '<div class="radio-inner"></div>';
+}
+
+function openProfileEditor(profile) {
+  state.editingProfile = profile;
+  document.getElementById('editor-title').textContent = profile === 'home' ? 'Home' : 'Outdoors';
+  document.getElementById('editor-eyebrow').textContent = profile === 'home' ? 'Indoor alarm profile' : 'Outdoor alarm profile';
+  syncProfileEditorUI();
+  goTo('profile-editor');
+}
+
+function syncProfileEditorUI() {
+  var sel = state.selectedSound[state.editingProfile];
+  document.querySelectorAll('.sound-item').forEach(function(item) {
+    var s = parseInt(item.getAttribute('data-sound'), 10);
+    var radio = item.querySelector('.sound-radio');
+    if (s === sel) radio.classList.add('selected');
+    else radio.classList.remove('selected');
+  });
+  var esc = state.selectedEscalation[state.editingProfile];
+  document.querySelectorAll('.escalation-opt').forEach(function(opt) {
+    var e = opt.getAttribute('data-esc');
+    if (e === esc) opt.className = 'escalation-opt on';
+    else opt.className = 'escalation-opt off';
+    opt.setAttribute('data-esc', e);
+  });
+}
+
+function selectSound(idx) {
+  state.selectedSound[state.editingProfile] = idx;
+  syncProfileEditorUI();
+}
+
+function selectEscalation(esc) {
+  state.selectedEscalation[state.editingProfile] = esc;
+  syncProfileEditorUI();
+}
+
+function previewSound() {}
+
+function saveProfile() {
+  var p = state.editingProfile;
+  var summary = soundNames[state.selectedSound[p]] + ' · ' + escalationLabels[state.selectedEscalation[p]];
+  var el = document.getElementById(p + '-profile-summary');
+  if (el) el.textContent = summary;
+  goTo('settings');
+}
+
+function confirmViaNFC() {
+  state.lastConfirmMethod = 'pillbox';
+  goTo('confirmed');
+}
+
+function confirmManual() {
+  state.lastConfirmMethod = 'manual';
+  goTo('confirmed');
+}
+
+function triggerAlarm(silent) {
+  if (silent) {
+    state.silenceOn = true;
+    document.getElementById('silence-toggle').classList.add('on');
+    document.getElementById('silence-row').classList.add('on');
+    document.getElementById('bell-slash').style.display = 'block';
+    document.getElementById('silence-text').textContent = 'This alarm is silenced';
+  }
+  goTo('alarm');
+}
+
+function showLockScreen() {
+  document.getElementById('lock-screen').classList.add('active');
+}
+function closeLockScreen() {
+  var el = document.getElementById('lock-screen');
+  if (el) el.classList.remove('active');
+}
+
+function resetDemo() {
+  state.silenceOn = false;
+  state.silenceAll = false;
+  state.shiftSelected = null;
+  state.customLunchTime = null;
+  state.profile = 'home';
+  state.cardCollapsed = false;
+  state.lastConfirmMethod = 'pillbox';
+  document.getElementById('silence-toggle').classList.remove('on');
+  document.getElementById('silence-row').classList.remove('on');
+  document.getElementById('bell-slash').style.display = 'none';
+  document.getElementById('silence-text').textContent = 'Silence this alarm';
+  document.getElementById('next-card').classList.remove('collapsed');
+  document.querySelectorAll('.adj-btn').forEach(function(btn){ btn.classList.remove('selected'); });
+  document.getElementById('shift-feedback').classList.remove('show');
+  document.getElementById('next-card-time').classList.remove('shifted');
+  syncSilenceAllUI();
+  setProfile('home');
+  updateMealLabel();
+  closeLockScreen();
+  closeMealTimeSheet();
+  goTo('home');
+}
+
+</script>
+
+</body>
+</html>
