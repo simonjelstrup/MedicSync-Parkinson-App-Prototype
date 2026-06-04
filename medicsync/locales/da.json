@@ -1,0 +1,259 @@
+{
+  "badges": {
+    "taken": "Taget",
+    "due": "Forfald",
+    "missed": "Glemt",
+    "manual": "Manuelt",
+    "scheduled": "Planlagt",
+    "upcoming": "Kommende"
+  },
+  "common": {
+    "save": "Gem",
+    "cancel": "Annuller",
+    "ok": "OK",
+    "done": "Færdig",
+    "back": "Tilbage",
+    "confirm": "Bekræft",
+    "reset": "Nulstil",
+    "settings": "Indstillinger"
+  },
+  "nav": {
+    "today": "I dag",
+    "schedule": "Plan",
+    "history": "Historik",
+    "settings": "Indstillinger"
+  },
+  "greeting": {
+    "morning": "Godmorgen,",
+    "afternoon": "Goddag,",
+    "evening": "Godaften,"
+  },
+  "home": {
+    "nextDose": "Næste dosis",
+    "allDosesToday": "Alle doser i dag",
+    "doseTakenEarly": "Dosis taget tidligt",
+    "shiftLunch": "Flyt frokosttid",
+    "shiftMealTime": "Flyt tidspunkt for {{meal}}",
+    "setExactTime": "Indstil præcis tid",
+    "lunchShiftedTo": "Frokost flyttet til",
+    "mealShiftedTo": "{{meal}} er flyttet til",
+    "alarmSound": "Alarmlyd",
+    "silenceThisAlarm": "Dæmp denne alarm",
+    "silenced": "Denne alarm er dæmpet",
+    "inTime": "Om {{time}}",
+    "reminderAt": "Påmindelse kl. {{remind}} · {{mealName}} kl. {{meal}}",
+    "allDone": "Alle doser taget for i dag",
+    "noDoses": "Ingen doser tilføjet — gå til Indstillinger for at tilføje en"
+  },
+  "dose": {
+    "morning": "Morgen",
+    "lunch": "Frokost",
+    "afternoon": "Eftermiddag",
+    "night": "Aften",
+    "suffix": "dosis",
+    "morningDose": "Morgendosis",
+    "lunchDose": "Frokostdosis",
+    "afternoonDose": "Eftermiddagsdosis",
+    "nightDose": "Aftendosis",
+    "anchor": {
+      "30beforeBreakfast": "30 min før morgenmad",
+      "30beforeLunch": "30 min før frokost",
+      "1hourBeforeDinner": "1 time før aftensmad",
+      "afterDinner": "Efter aftensmad"
+    }
+  },
+  "profile": {
+    "home": "Hjemme",
+    "outdoors": "Udendørs",
+    "homeSummary": "Blid klokke · langsom optrapning",
+    "outdoorsSummary": "Stærk tone · hurtig optrapning",
+    "alarmProfileEyebrow": "Alarmprofil",
+    "indoorLabel": "Indendørs alarmprofil",
+    "outdoorLabel": "Udendørs alarmprofil",
+    "sound": "Lyd",
+    "escalationLabel": "Lydstyrkeoptrapning",
+    "escalationHelp": "Hvor hurtigt lyden øges",
+    "slow": "Langsom",
+    "over5min": "Over 5 min",
+    "medium": "Mellem",
+    "over3min": "Over 3 min",
+    "fast": "Hurtig",
+    "over1min": "Over 1 min",
+    "patternLabel": "Lydmønster",
+    "patternHelp": "Hvordan lyden afspilles",
+    "patternConstant": "Konstant",
+    "patternConstantSub": "Afspilles kontinuerligt",
+    "patternIntervals": "Intervaller",
+    "patternIntervalsSub": "5 sek til, 5 sek fra",
+    "patternEvery30": "Hvert 30. sek",
+    "patternEvery30Sub": "Enkelt klokkeslag",
+    "patternEveryMin": "Hvert minut",
+    "patternEveryMinSub": "Enkelt klokkeslag",
+    "save": "Gem profil"
+  },
+  "sound": {
+    "gentleChime": "Blid klokke",
+    "softBells": "Bløde klokker",
+    "morningBirds": "Morgenfugle",
+    "windBells": "Vindklokker",
+    "strongTone": "Stærk tone"
+  },
+  "alarm": {
+    "kicker": "Tid til din medicin",
+    "silentVibration": "Stille — kun vibration",
+    "nfcMain": "Hold telefon mod pilleæsken",
+    "nfcSub": "Hold dem tæt for at bekræfte",
+    "nfcScanning": "Søger efter pilleæske…",
+    "nfcTapRetry": "Tryk for at scanne igen",
+    "nfcScanPrompt": "Hold mod pilleæsken for at bekræfte",
+    "volumeEscalating": "Lydstyrke stiger",
+    "notNearPillbox": "ikke ved din pilleæske?",
+    "confirmWithoutPillbox": "Bekræft uden pilleæske",
+    "contract": "Alarmen fortsætter, til din dosis er bekræftet"
+  },
+  "manual": {
+    "backToAlarm": "Tilbage til alarm",
+    "question": "Har du taget al din medicin?",
+    "hint": "Bekræft hver enkelt, inden du fortsætter. Dette logges som manuel bekræftelse.",
+    "yesIDid": "Ja, jeg tog dem alle",
+    "notYet": "Ikke endnu — gå tilbage"
+  },
+  "confirmed": {
+    "title": "Dosis bekræftet",
+    "viaPillbox": "Logget via pilleæske",
+    "manually": "Logget manuelt",
+    "youCanEat": "Du kan spise kl.",
+    "wellLetYouKnow": "Vi giver dig besked, når det er tid."
+  },
+  "eat": {
+    "kicker": "Alt klart",
+    "title": "Spis nu!",
+    "sub": "Det er gået 30 minutter siden din sidste medicindosis.\n\nNyd din frokost.",
+    "okThanks": "OK, tak"
+  },
+  "notifications": {
+    "okToEatBody": "Det er gået 30 minutter — du kan spise nu."
+  },
+  "history": {
+    "title": "Historik",
+    "last30days": "De sidste 30 dage",
+    "clearHistory": "Ryd historik",
+    "clearConfirmTitle": "Ryd historik?",
+    "clearConfirmMessage": "Dette sletter permanent alle loggede doser.",
+    "clearConfirmOk": "Ryd",
+    "clearConfirmCancel": "Annuller"
+  },
+  "day": {
+    "today": "I dag",
+    "yesterday": "I går"
+  },
+  "schedule": {
+    "title": "Min plan",
+    "subtitle": "Din daglige rutine",
+    "dailyDoses": "Daglige doser",
+    "toChange": "Gå til Indstillinger for at ændre din rutine.",
+    "anchorAt": "Kl. {{time}}"
+  },
+  "settings": {
+    "yourDoses": "Dine medicindoser",
+    "addDose": "Tilføj dosis",
+    "medicationTiming": "Medicintiming",
+    "mealPreference": "Måltidspræference",
+    "whenToTake": "Hvornår tages medicinen",
+    "30minBefore": "30 min før måltid",
+    "1hourAfter": "1 time efter måltid",
+    "defaultMealTimes": "Standardmåltidstider",
+    "breakfast": "Morgenmad",
+    "lunch": "Frokost",
+    "dinner": "Aftensmad",
+    "alarmProfiles": "Alarmprofiler",
+    "language": "Sprog",
+    "account": "Konto",
+    "accountSignedOut": "Log ind eller opret konto",
+    "accountSignedOutSub": "Valgfrit · Krævet for deling med pårørende",
+    "pillbox": "Pilleæske",
+    "pillboxLocation": "Pilleæskens placering",
+    "pillboxSub": "Hjemme · Set for 2 min siden",
+    "relatives": "Pårørende",
+    "notifyMissed": "Giv besked ved glemt dosis",
+    "after15min": "Efter 15 minutter",
+    "afterMin": "Efter {{count}} minutter",
+    "relativesView": "Pårørendevisning"
+  },
+  "doseEditor": {
+    "eyebrow": "Rediger dosis",
+    "eyebrowNew": "Ny dosis",
+    "titleNew": "Ny dosis",
+    "labelField": "Dosisbetegnelse",
+    "timing": "Timing",
+    "take": "Tag",
+    "before": "før",
+    "after": "efter",
+    "lunchMeal": "frokost",
+    "breakfastMeal": "morgenmad",
+    "dinnerMeal": "aftensmad",
+    "medications": "Medicin",
+    "addMedication": "Tilføj medicin",
+    "addMedicationName": "Medicinnavn",
+    "addMedicationDosage": "Dosering (f.eks. 100mg)",
+    "save": "Gem dosis",
+    "delete": "Slet denne dosis",
+    "mealRelative": "Måltidsrelativ timing",
+    "fixedTime": "Fast tidspunkt",
+    "selectMinutes": "Offset fra måltid",
+    "selectMeal": "Måltid",
+    "offset": "Offset",
+    "relation": "Timing",
+    "withMeal": "Til måltid",
+    "oneHour": "1 time",
+    "oneAndHalfHours": "1½ time",
+    "twoHours": "2 timer",
+    "labelRequired": "Angiv venligst et navn til denne dosis",
+    "deleteConfirm": "Er du sikker på, at du vil slette denne dosis?"
+  },
+  "pillbox": {
+    "title": "Pilleæskens placering",
+    "subtitle": "Hjælp dig med at finde den · hold den hos dig",
+    "statusLabel": "Nuværende status",
+    "statusOk": "Pilleæsken er hjemme",
+    "statusOkSub": "Set for 2 minutter siden",
+    "settingsLabel": "Påmindelsesindstillinger",
+    "leaveAlert": "Giv besked, hvis jeg forlader hjemmet uden den",
+    "radius": "Giv besked efter",
+    "radiusSub": "100 meter fra hjemmet",
+    "makeSound": "Få pilleæsken til at spille en lyd",
+    "makeSoundStop": "Stop lyd",
+    "radiusSub": "{{count}} meter fra hjemmet",
+    "openFindMy": "Find AirTag i Find My"
+  },
+  "relatives": {
+    "titleName": "Kurts doser",
+    "lastUpdated": "Sidst opdateret nu · Kun læsning"
+  },
+  "lang": {
+    "title": "Vælg sprog",
+    "sub": "Appen opdaterer med det samme",
+    "english": "English",
+    "danish": "Dansk"
+  },
+  "takenEarly": {
+    "title": "Dosis taget tidligt",
+    "sub": "Hvornår tog du den?",
+    "medsLabel": "Logger denne dosis",
+    "confirm": "Bekræft"
+  },
+  "timePicker": {
+    "setLunchTime": "Indstil frokosttid",
+    "setBreakfastTime": "Indstil morgenmadstid",
+    "setDinnerTime": "Indstil aftensmadstid",
+    "todayScope": "Kun i dag · nulstilles i morgen",
+    "defaultScope": "Standard for hver dag"
+  },
+  "action": {
+    "reset": "Nulstil",
+    "cancel": "Annuller",
+    "ok": "OK",
+    "done": "Færdig",
+    "save": "Gem"
+  }
+}

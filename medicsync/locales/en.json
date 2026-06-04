@@ -1,0 +1,259 @@
+{
+  "badges": {
+    "taken": "Taken",
+    "due": "Due",
+    "missed": "Missed",
+    "manual": "Manual",
+    "scheduled": "Scheduled",
+    "upcoming": "Upcoming"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "done": "Done",
+    "back": "Back",
+    "confirm": "Confirm",
+    "reset": "Reset",
+    "settings": "Settings"
+  },
+  "nav": {
+    "today": "Today",
+    "schedule": "Schedule",
+    "history": "History",
+    "settings": "Settings"
+  },
+  "greeting": {
+    "morning": "Good morning,",
+    "afternoon": "Good afternoon,",
+    "evening": "Good evening,"
+  },
+  "home": {
+    "nextDose": "Next dose",
+    "allDosesToday": "All doses today",
+    "doseTakenEarly": "Dose taken early",
+    "shiftLunch": "Shift lunch time",
+    "shiftMealTime": "Shift {{meal}} time",
+    "setExactTime": "Set exact time",
+    "lunchShiftedTo": "Lunch shifted to",
+    "mealShiftedTo": "{{meal}} shifted to",
+    "alarmSound": "Alarm sound",
+    "silenceThisAlarm": "Silence this alarm",
+    "silenced": "This alarm is silenced",
+    "inTime": "In {{time}}",
+    "reminderAt": "Reminder at {{remind}} · {{mealName}} at {{meal}}",
+    "allDone": "All doses taken for today",
+    "noDoses": "No doses added yet — go to Settings to add one"
+  },
+  "dose": {
+    "morning": "Morning",
+    "lunch": "Lunch",
+    "afternoon": "Afternoon",
+    "night": "Night",
+    "suffix": "dose",
+    "morningDose": "Morning dose",
+    "lunchDose": "Lunch dose",
+    "afternoonDose": "Afternoon dose",
+    "nightDose": "Night dose",
+    "anchor": {
+      "30beforeBreakfast": "30 min before breakfast",
+      "30beforeLunch": "30 min before lunch",
+      "1hourBeforeDinner": "1 hour before dinner",
+      "afterDinner": "After dinner"
+    }
+  },
+  "profile": {
+    "home": "Home",
+    "outdoors": "Outdoors",
+    "homeSummary": "Gentle chime · slow escalation",
+    "outdoorsSummary": "Strong tone · fast escalation",
+    "alarmProfileEyebrow": "Alarm profile",
+    "indoorLabel": "Indoor alarm profile",
+    "outdoorLabel": "Outdoor alarm profile",
+    "sound": "Sound",
+    "escalationLabel": "Volume escalation",
+    "escalationHelp": "How quickly volume increases",
+    "slow": "Slow",
+    "over5min": "Over 5 min",
+    "medium": "Medium",
+    "over3min": "Over 3 min",
+    "fast": "Fast",
+    "over1min": "Over 1 min",
+    "patternLabel": "Sound pattern",
+    "patternHelp": "How the sound plays",
+    "patternConstant": "Constant",
+    "patternConstantSub": "Plays continuously",
+    "patternIntervals": "Intervals",
+    "patternIntervalsSub": "5 sec on, 5 sec off",
+    "patternEvery30": "Every 30 sec",
+    "patternEvery30Sub": "Single chime",
+    "patternEveryMin": "Every minute",
+    "patternEveryMinSub": "Single chime",
+    "save": "Save profile"
+  },
+  "sound": {
+    "gentleChime": "Gentle chime",
+    "softBells": "Soft bells",
+    "morningBirds": "Morning birds",
+    "windBells": "Wind bells",
+    "strongTone": "Strong tone"
+  },
+  "alarm": {
+    "kicker": "Time for your dose",
+    "silentVibration": "Silent — vibration only",
+    "nfcMain": "Tap phone to pill box",
+    "nfcSub": "Bring them close together to confirm",
+    "nfcScanning": "Scanning for pill box…",
+    "nfcTapRetry": "Tap to scan again",
+    "nfcScanPrompt": "Hold near pill box to confirm",
+    "volumeEscalating": "Volume escalating",
+    "notNearPillbox": "not near your pill box?",
+    "confirmWithoutPillbox": "Confirm without pill box",
+    "contract": "Alarm stays active until your dose is confirmed"
+  },
+  "manual": {
+    "backToAlarm": "Back to alarm",
+    "question": "Did you take all your medications?",
+    "hint": "Confirm each one before continuing. This will be logged as a manual confirmation.",
+    "yesIDid": "Yes, I took them all",
+    "notYet": "Not yet — go back"
+  },
+  "confirmed": {
+    "title": "Dose confirmed",
+    "viaPillbox": "Logged via pill box",
+    "manually": "Logged manually",
+    "youCanEat": "You can eat at",
+    "wellLetYouKnow": "We'll let you know when it's time."
+  },
+  "eat": {
+    "kicker": "All clear",
+    "title": "Time to eat!",
+    "sub": "It has been 30 minutes since your last medication dose.\n\nEnjoy your lunch.",
+    "okThanks": "OK, thank you"
+  },
+  "notifications": {
+    "okToEatBody": "It has been 30 minutes — you can eat now."
+  },
+  "history": {
+    "title": "History",
+    "last30days": "Last 30 days",
+    "clearHistory": "Clear history",
+    "clearConfirmTitle": "Clear history?",
+    "clearConfirmMessage": "This will permanently delete all logged doses.",
+    "clearConfirmOk": "Clear",
+    "clearConfirmCancel": "Cancel"
+  },
+  "day": {
+    "today": "Today",
+    "yesterday": "Yesterday"
+  },
+  "schedule": {
+    "title": "My Schedule",
+    "subtitle": "Your daily routine",
+    "dailyDoses": "Daily doses",
+    "toChange": "To change your routine, go to Settings.",
+    "anchorAt": "At {{time}}"
+  },
+  "settings": {
+    "yourDoses": "Your medication doses",
+    "addDose": "Add a dose",
+    "medicationTiming": "Medication timing",
+    "mealPreference": "Meal preference",
+    "whenToTake": "When to take medication",
+    "30minBefore": "30 min before meal",
+    "1hourAfter": "1 hour after meal",
+    "defaultMealTimes": "Default meal times",
+    "breakfast": "Breakfast",
+    "lunch": "Lunch",
+    "dinner": "Dinner",
+    "alarmProfiles": "Alarm profiles",
+    "language": "Language",
+    "account": "Account",
+    "accountSignedOut": "Sign in or create an account",
+    "accountSignedOutSub": "Optional · Required for sharing with relatives",
+    "pillbox": "Pill box",
+    "pillboxLocation": "Pill box location",
+    "pillboxSub": "At home · Last seen 2 min ago",
+    "relatives": "Relatives",
+    "notifyMissed": "Notify if dose missed",
+    "after15min": "After 15 minutes",
+    "afterMin": "After {{count}} minutes",
+    "relativesView": "Relatives view"
+  },
+  "doseEditor": {
+    "eyebrow": "Edit dose",
+    "eyebrowNew": "New dose",
+    "titleNew": "New dose",
+    "labelField": "Dose label",
+    "timing": "Timing",
+    "take": "Take",
+    "before": "before",
+    "after": "after",
+    "lunchMeal": "lunch",
+    "breakfastMeal": "breakfast",
+    "dinnerMeal": "dinner",
+    "medications": "Medications",
+    "addMedication": "Add medication",
+    "addMedicationName": "Medication name",
+    "addMedicationDosage": "Dosage (e.g. 100mg)",
+    "save": "Save dose",
+    "delete": "Delete this dose",
+    "mealRelative": "Meal-relative timing",
+    "fixedTime": "Fixed time",
+    "selectMinutes": "Offset from meal",
+    "selectMeal": "Meal",
+    "offset": "Offset",
+    "relation": "Timing",
+    "withMeal": "With meal",
+    "oneHour": "1 hour",
+    "oneAndHalfHours": "1½ hours",
+    "twoHours": "2 hours",
+    "labelRequired": "Please enter a name for this dose",
+    "deleteConfirm": "Are you sure you want to delete this dose?"
+  },
+  "pillbox": {
+    "title": "Pill box location",
+    "subtitle": "Help you find it · keep it with you",
+    "statusLabel": "Current status",
+    "statusOk": "Pill box is at home",
+    "statusOkSub": "Last seen 2 minutes ago",
+    "settingsLabel": "Reminder settings",
+    "leaveAlert": "Notify if I leave home without it",
+    "radius": "Notify after",
+    "radiusSub": "100 metres from home",
+    "makeSound": "Make pill box play a sound",
+    "makeSoundStop": "Stop sound",
+    "radiusSub": "{{count}} metres from home",
+    "openFindMy": "Find AirTag in Find My"
+  },
+  "relatives": {
+    "titleName": "Kurt's doses",
+    "lastUpdated": "Last updated just now · Read only"
+  },
+  "lang": {
+    "title": "Choose language",
+    "sub": "The app updates immediately",
+    "english": "English",
+    "danish": "Danish"
+  },
+  "takenEarly": {
+    "title": "Dose taken early",
+    "sub": "When did you take it?",
+    "medsLabel": "Logging this dose",
+    "confirm": "Confirm"
+  },
+  "timePicker": {
+    "setLunchTime": "Set lunch time",
+    "setBreakfastTime": "Set breakfast time",
+    "setDinnerTime": "Set dinner time",
+    "todayScope": "Just for today · resets tomorrow",
+    "defaultScope": "Default for every day"
+  },
+  "action": {
+    "reset": "Reset",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "done": "Done",
+    "save": "Save"
+  }
+}

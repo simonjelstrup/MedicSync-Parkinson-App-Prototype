@@ -1,0 +1,78 @@
+{
+  "expo": {
+    "name": "MedicSync",
+    "slug": "medicsync",
+    "scheme": "medicsync",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/newicon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FDF8F3"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.medicsync.app",
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "audio",
+          "fetch",
+          "remote-notification"
+        ],
+        "ITSAppUsesNonExemptEncryption": false,
+        "NFCReaderUsageDescription": "MedicSync uses NFC to confirm medication doses by tapping near the pill box."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/newicon.png",
+        "backgroundColor": "#FDF8F3"
+      },
+      "package": "com.medicsync.app",
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-font",
+      "expo-router",
+      "expo-dev-client",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/newicon.png",
+          "color": "#C8914F",
+          "defaultChannel": "dose-alarm",
+          "sounds": [
+            "./assets/sounds/gentle-chime.wav",
+            "./assets/sounds/soft-bells.wav",
+            "./assets/sounds/morning-birds.wav",
+            "./assets/sounds/wind-bells.wav",
+            "./assets/sounds/strong-tone.wav"
+          ]
+        }
+      ],
+      "expo-audio",
+      "./plugins/withoutPushEntitlement",
+      "./plugins/withNfcEntitlement",
+      "./plugins/withoutScriptSandbox"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "688cafcc-b9f0-44fd-afb8-03324cad12c9"
+      }
+    }
+  }
+}
